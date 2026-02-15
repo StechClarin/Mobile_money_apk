@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/app_transitions.dart';
 
 class StaticQRCard extends StatelessWidget {
   const StaticQRCard({super.key});
@@ -60,9 +61,9 @@ class StaticQRCard extends StatelessWidget {
   }
 
   void _showZoomedQR(BuildContext context) {
-    showDialog(
+    AppTransitions.showAppDialog(
       context: context,
-      builder: (context) => Dialog(
+      child: Dialog(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),

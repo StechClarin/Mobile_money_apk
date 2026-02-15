@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/constants.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../providers/payment_controller.dart';
 import '../providers/payment_state.dart';
 
 class PaymentScreen extends ConsumerStatefulWidget {
-  const PaymentScreen({super.key});
+  final String? recipientName;
+  final String? recipientNumber;
+
+  const PaymentScreen({
+    super.key,
+    this.recipientName,
+    this.recipientNumber,
+  });
 
   @override
   ConsumerState<PaymentScreen> createState() => _PaymentScreenState();
@@ -70,6 +79,52 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Recipient Info Card
+            if (widget.recipientName != null || widget.recipientNumber != null)
+              Container(
+                margin: const EdgeInsets.only(bottom: AppSpacing.lg),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppTheme.mtnYellow.withValues(alpha: 0.3)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: AppTheme.mtnYellow.withValues(alpha: 0.1),
+                      child: const Icon(Icons.person, color: AppTheme.black),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.recipientName ?? 'Destinataire inconnu',
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          Text(
+                            widget.recipientNumber ?? '',
+                            style: TextStyle(color: Colors.grey.shade600),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit, size: 20),
+                      onPressed: () => context.pop(),
+                    ),
+                  ],
+                ),
+              ),
+
             // Sender Input (Total)
             _buildAmountInput(
               controller: _sentController,
@@ -125,8 +180,14 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
             ElevatedButton(
               onPressed: (state.amountSent > 0 && state.isAmountValid)
                   ? () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Transfert initié !')),
+                      context.push(
+                        AppRoutes.transactionReceipt,
+                        extra: {
+                          'name': widget.recipientName ?? 'Destinataire inconnu',
+                          'number': widget.recipientNumber ?? '',
+                          'amount': state.amountReceived,
+                          'fees': state.fees,
+                        },
                       );
                     }
                   : null, 

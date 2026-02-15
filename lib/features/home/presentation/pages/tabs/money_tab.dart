@@ -3,7 +3,7 @@ import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../widgets/promo_carousel.dart';
 import '../../widgets/services_grid.dart';
-import '../../widgets/home_header.dart';
+import '../../widgets/balance_qr_section.dart'; // New section
 import '../../widgets/recent_transactions.dart';
 import '../../../domain/entities/promo_banner.dart';
 
@@ -26,40 +26,38 @@ class _MoneyTabState extends State<MoneyTab> with AutomaticKeepAliveClientMixin 
       slivers: [
         SliverAppBar(
           backgroundColor: AppTheme.mtnYellow,
-          title: Text(
-            'My MoMo',
+          leading: IconButton(
+            icon: const Icon(Icons.menu, color: AppTheme.black),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+          title: const Text(
+            '677 00 00 00', // Center connected number
             style: TextStyle(
               color: AppTheme.black,
-              fontSize: 24,
-              fontWeight: FontWeight.w900,
-              letterSpacing: -1.0,
-              fontFamily: 'Serif', // Fallback to a serif if available, or just distinct style
-              shadows: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  offset: const Offset(2, 2),
-                  blurRadius: 4,
-                ),
-              ],
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          centerTitle: false,
+          centerTitle: true,
           floating: true,
           pinned: true,
-          snap: true,
-          expandedHeight: 320, // Increased for larger QR header
-          flexibleSpace: const FlexibleSpaceBar(
-            background: Padding(
-              padding: EdgeInsets.only(top: 60.0),
-              child: HomeHeader(),
-            ),
-          ),
+          elevation: 0,
         ),
         const SliverToBoxAdapter(
-          child: SizedBox(height: AppSpacing.md),
+          child: SizedBox(height: AppSpacing.lg),
         ),
         
-        // 1. Promo Banner
+        // 1. Balance & QR Section (New location)
+        const SliverToBoxAdapter(
+          child: BalanceQrSection(),
+        ),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: AppSpacing.lg),
+        ),
+        
+        // 2. Promo Banner
         SliverToBoxAdapter(
           child: PromoCarousel(
             banners: const [
@@ -73,7 +71,7 @@ class _MoneyTabState extends State<MoneyTab> with AutomaticKeepAliveClientMixin 
           child: SizedBox(height: AppSpacing.lg),
         ),
 
-        // 2. Services Grid (Cards are now here)
+        // 3. Services Grid
         const SliverToBoxAdapter(
           child: ServicesGrid(),
         ),
@@ -81,7 +79,7 @@ class _MoneyTabState extends State<MoneyTab> with AutomaticKeepAliveClientMixin 
           child: SizedBox(height: AppSpacing.lg),
         ),
 
-        // 3. Recent Transactions
+        // 4. Recent Transactions
         const SliverToBoxAdapter(
           child: RecentTransactions(),
         ),

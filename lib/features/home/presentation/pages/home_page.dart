@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/constants.dart';
+import 'package:mobilemoney/core/design_system/app_colors.dart';
 import '../../../../core/theme/app_theme.dart';
 import 'tabs/money_tab.dart';
 import 'tabs/ma_ligne_tab.dart';
@@ -25,6 +28,45 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(color: AppTheme.mtnYellow),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.white,
+                    child: Icon(Icons.person, color: AppColors.primary, size: 40),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Yello User',
+                    style: TextStyle(color: AppTheme.black, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '677 00 00 00',
+                    style: TextStyle(color: AppTheme.black.withValues(alpha: 0.7)),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.history),
+              title: const Text('Historique'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Paramètres'),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
       body: IndexedStack(
         index: _currentIndex,
         children: _pages,
@@ -92,7 +134,13 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: _currentIndex == 1 // Only show FAB on Money Tab
           ? FloatingActionButton.extended(
-              onPressed: () {},
+              onPressed: () {
+                // Simulate scan capture and navigate to payment
+                context.push(
+                  AppRoutes.payment,
+                  extra: {'name': 'Scan Captured: Jean D.', 'number': '677 88 99 00'},
+                );
+              },
               backgroundColor: AppTheme.mtnYellow,
               foregroundColor: AppTheme.black,
               icon: const Icon(Icons.qr_code_scanner),

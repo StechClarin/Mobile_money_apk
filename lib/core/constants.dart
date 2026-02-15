@@ -6,4 +6,8 @@ class AppRoutes {
   static const String bundles = '/bundles';
   static const String transactions = '/transactions';
   static const String account = '/account';
+  static const String shop = '/shop';
+  static const String cart = '/cart';
+  static const String recipientSelection = '/recipient-selection';
+  static const String transactionReceipt = '/transaction-receipt';
 }

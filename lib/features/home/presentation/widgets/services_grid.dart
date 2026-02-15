@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/design_system/app_colors.dart';
+import '../../../../core/constants.dart';
 
-class MomoServiceTile extends StatelessWidget {
+class MomoServiceTile extends StatefulWidget {
   final String title;
   final IconData icon;
   final Color color;
@@ -18,37 +20,74 @@ class MomoServiceTile extends StatelessWidget {
   });
 
   @override
+  State<MomoServiceTile> createState() => _MomoServiceTileState();
+}
+
+class _MomoServiceTileState extends State<MomoServiceTile> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.92).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(30),
-          splashColor: color.withValues(alpha: 0.2),
-          child: Container(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
+    return GestureDetector(
+      onTapDown: (_) => _controller.forward(),
+      onTapUp: (_) => _controller.reverse(),
+      onTapCancel: () => _controller.reverse(),
+      onTap: widget.onTap,
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: widget.color.withValues(alpha: 0.08),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: widget.color.withValues(alpha: 0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Icon(widget.icon, color: widget.color, size: 24),
             ),
-            child: Icon(icon, color: color, size: 28),
-          ),
+            const SizedBox(height: 12),
+            Text(
+              widget.title,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: AppColors.black,
+                height: 1.1,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: AppSpacing.sm),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontSize: 11, // Slightly reduced font size
-            fontWeight: FontWeight.w500,
-            color: AppTheme.black,
-            height: 1.1,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
@@ -60,22 +99,27 @@ class ServicesGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     // Mock Data for Services
     final services = [
-      {'title': 'Send Money', 'icon': Icons.send, 'color': Colors.blue, 'route': '/payment'},
-      {'title': 'Buy Airtime', 'icon': Icons.phone_android, 'color': Colors.orange, 'route': '/bundles'},
-      {'title': 'Pay Bills', 'icon': Icons.receipt_long, 'color': Colors.red, 'route': '/transactions'},
-      {'title': 'Bank Transfer', 'icon': Icons.account_balance, 'color': Colors.green, 'route': '/transactions'},
-      {'title': 'Cards', 'icon': Icons.credit_card, 'color': Colors.purple, 'route': '/cards'},
+      {'title': 'Envoi Argent', 'icon': Icons.send, 'color': Colors.blue, 'route': AppRoutes.recipientSelection},
+      {'title': 'Pass & Crédit', 'icon': Icons.phone_android, 'color': Colors.orange, 'route': '/bundles'},
+      {'title': 'Factures', 'icon': Icons.receipt_long, 'color': Colors.red, 'route': '/transactions'},
+      {'title': 'Banque', 'icon': Icons.account_balance, 'color': Colors.green, 'route': '/transactions'},
+      {'title': 'Cartes MoMo', 'icon': Icons.credit_card, 'color': Colors.purple, 'route': '/cards'},
     ];
 
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.lg,
+        AppSpacing.lg,
+        0,
+      ),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
-        mainAxisSpacing: AppSpacing.servicesGridSpacing,
+        mainAxisSpacing: 24,
         crossAxisSpacing: AppSpacing.md,
-        childAspectRatio: 0.8,
+        childAspectRatio: 0.65,
       ),
       itemCount: services.length,
       itemBuilder: (context, index) {

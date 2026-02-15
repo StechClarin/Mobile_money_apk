@@ -1,12 +1,45 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../cards/domain/entities/card_model.dart';
+import '../../../cards/presentation/widgets/payment_card_widget.dart';
 
 class CardsSection extends StatelessWidget {
   const CardsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Mock Data using the new model
+    final cards = [
+      PaymentCard(
+        id: '1',
+        cardNumber: '•••• •••• •••• 4582',
+        holderName: 'Yello User',
+        expiryDate: '12/26',
+        type: PaymentCardType.visa,
+        balance: 150000,
+        gradientColors: [Colors.black, Colors.grey.shade800],
+      ),
+      PaymentCard(
+        id: '2',
+        cardNumber: '677 00 00 00',
+        holderName: 'Yello User',
+        expiryDate: 'No Expiry',
+        type: PaymentCardType.momo,
+        balance: 45000,
+        gradientColors: [AppTheme.mtnYellow, Colors.orange.shade700],
+      ),
+       PaymentCard(
+        id: '3',
+        cardNumber: '•••• •••• •••• 1234',
+        holderName: 'Yello User',
+        expiryDate: '08/28',
+        type: PaymentCardType.mastercard,
+        balance: 85000,
+        gradientColors: [Colors.blue.shade900, Colors.blue.shade700],
+      ),
+    ];
+
     return Column(
       children: [
         Padding(
@@ -31,74 +64,18 @@ class CardsSection extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.sm),
         SizedBox(
-          height: 180,
+          height: 200, // Increased height for better shadow visibility
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-            itemCount: 2,
+            itemCount: cards.length,
             itemBuilder: (context, index) {
-              return Container(
-                width: 300,
-                margin: const EdgeInsets.only(right: AppSpacing.md),
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: index == 0
-                        ? [Colors.black, Colors.grey.shade800]
-                        : [Colors.blue.shade900, Colors.blue.shade700],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.2),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Icon(Icons.credit_card, color: Colors.white),
-                        Text(
-                          index == 0 ? 'VISA' : 'MasterCard',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Text(
-                      '•••• •••• •••• 4582',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        letterSpacing: 2,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Yello User',
-                          style: TextStyle(color: Colors.white70),
-                        ),
-                        Text(
-                          '12/2${index + 4}',
-                          style: const TextStyle(color: Colors.white70),
-                        ),
-                      ],
-                    ),
-                  ],
+              return Padding(
+                padding: const EdgeInsets.only(right: AppSpacing.md, bottom: 10),
+                child: PaymentCardWidget(
+                  card: cards[index],
+                  isCompact: true,
+                  onTap: () {},
                 ),
               );
             },
