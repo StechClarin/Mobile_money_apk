@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_theme.dart';
+import '../../../../core/design_system/app_colors.dart';
 import '../../../../core/theme/app_transitions.dart';
 import '../../../transactions/domain/entities/transaction.dart';
 import '../../../transactions/presentation/widgets/transaction_detail_sheet.dart';
@@ -60,37 +60,45 @@ class RecentTransactions extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.black,
+                  color: Colors.white,
+                  letterSpacing: 0.3,
                 ),
               ),
               TextButton(
                 onPressed: () {},
-                child: const Text('View All'),
+                child: const Text(
+                  'View All',
+                  style: TextStyle(
+                    color: AppColors.monarchPurpleNeon,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ],
           ),
           const SizedBox(height: AppSpacing.sm),
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
+              color: AppColors.spotifyCard,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xFF242424), width: 0.8),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 15,
-                  offset: const Offset(0, 5),
+                  color: Colors.black.withValues(alpha: 0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 6),
             child: ListView.separated(
               padding: EdgeInsets.zero,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: transactions.length,
-              separatorBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Divider(height: 1, color: Colors.grey.shade100),
+              separatorBuilder: (context, index) => const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Divider(height: 1, color: Color(0xFF242424)),
               ),
               itemBuilder: (context, index) {
                 final transaction = transactions[index];
@@ -105,7 +113,7 @@ class RecentTransactions extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: _getIconColor(transaction.type).withValues(alpha: 0.1),
+                              color: _getIconColor(transaction.type).withValues(alpha: 0.15),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -124,13 +132,13 @@ class RecentTransactions extends StatelessWidget {
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
-                                    color: AppTheme.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   transaction.subtitle,
-                                  style: TextStyle(color: Colors.grey[500], fontSize: 12, fontWeight: FontWeight.w500),
+                                  style: const TextStyle(color: AppColors.spotifyGrey, fontSize: 12, fontWeight: FontWeight.w500),
                                 ),
                               ],
                             ),

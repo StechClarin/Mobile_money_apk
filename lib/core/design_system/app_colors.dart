@@ -58,34 +58,37 @@ class AppColors {
   static const Color monarchPurpleAura = Color(0xFF7C3AED); // Radiant Shadow Aura
   static const Color monarchCyan = Color(0xFF38BDF8); // Spectral Eye Glow
 
-  // Dark Surface & Backgrounds
-  static const Color darkScaffold = Color(0xFF0A0912); // Void / Abyss Black
-  static const Color darkCard = Color(0xFF131122); // Dark Velvet Obsidian
-  static const Color darkElevated = Color(0xFF1C1833); // Elevated Dock Surface
-  static const Color darkBorder = Color(0xFF282347); // Subtle Shadow Rift Border
-  static const Color textMutedDark = Color(0xFF7A7893); // Sleek Inactive Grey
-  static const Color textLight = Color(0xFFF1F0F7);
+  // Authentic Spotify Dark Surfaces & Backgrounds
+  static const Color spotifyBlack = Color(0xFF121212); // Spotify Base Black
+  static const Color spotifyCard = Color(0xFF181818); // Spotify Surface / Tile
+  static const Color spotifyElevated = Color(0xFF242424); // Spotify Elevated Surface
+  static const Color spotifyHover = Color(0xFF2A2A2A); // Spotify Hover/Divider
+  static const Color spotifyGrey = Color(0xFFB3B3B3); // Spotify Secondary Text
+  static const Color spotifySubtle = Color(0xFF727272); // Spotify Muted / Timestamp
+  static const Color spotifyWhite = Color(0xFFFFFFFF); // Spotify Primary Text
 
-  // Sung Jin-woo Shadow Glow
+  // Dark Scheme Mappings
+  static const Color darkScaffold = spotifyBlack;
+  static const Color darkCard = spotifyCard;
+  static const Color darkElevated = spotifyElevated;
+  static const Color darkBorder = Color(0xFF222222);
+  static const Color textMutedDark = spotifyGrey;
+  static const Color textLight = spotifyWhite;
+
+  // Spotify-style Smooth Shadows
   static List<BoxShadow> get monarchGlow => [
         BoxShadow(
-          color: monarchPurple.withValues(alpha: 0.35),
-          blurRadius: 24,
+          color: monarchPurple.withValues(alpha: 0.25),
+          blurRadius: 20,
           offset: const Offset(0, 6),
-          spreadRadius: -2,
         ),
       ];
 
   static List<BoxShadow> get navBarDarkShadow => [
         BoxShadow(
-          color: Colors.black.withValues(alpha: 0.65),
-          blurRadius: 30,
-          offset: const Offset(0, -8),
-        ),
-        BoxShadow(
-          color: monarchPurple.withValues(alpha: 0.18),
-          blurRadius: 20,
-          offset: const Offset(0, -2),
+          color: Colors.black.withValues(alpha: 0.5),
+          blurRadius: 16,
+          offset: const Offset(0, -4),
         ),
       ];
 
@@ -93,5 +96,15 @@ class AppColors {
         colors: [monarchPurpleNeon, monarchPurpleDeep],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
+      );
+
+  // Spotify Hero Top Subtle Infusion Gradient
+  static Gradient get spotifyHeroGradient => LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          monarchPurpleDeep.withValues(alpha: 0.28),
+          spotifyBlack,
+        ],
       );
 }

@@ -105,13 +105,13 @@ class _HomePageState extends State<HomePage> {
                   extra: {'name': 'Scan Captured: Jean D.', 'number': '677 88 99 00'},
                 );
               },
-              backgroundColor: AppColors.monarchPurpleDeep,
+              backgroundColor: AppColors.monarchPurpleNeon,
               foregroundColor: Colors.white,
-              elevation: 6,
-              icon: const Icon(Icons.qr_code_scanner, color: AppColors.monarchPurpleNeon),
+              elevation: 4,
+              icon: const Icon(Icons.qr_code_scanner, color: Colors.white, size: 20),
               label: const Text(
                 'Scan & Pay',
-                style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 0.5),
+                style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 0.3),
               ),
             )
           : null,

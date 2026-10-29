@@ -63,13 +63,12 @@ class WallissBottomNavBar extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.darkCard,
+        color: AppColors.spotifyCard, // Spotify matte surface
         boxShadow: AppColors.navBarDarkShadow,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-        border: Border(
+        border: const Border(
           top: BorderSide(
-            color: AppColors.monarchPurple.withValues(alpha: 0.25),
-            width: 1.2,
+            color: Color(0xFF282828), // Spotify discrete divider
+            width: 0.8,
           ),
         ),
       ),
@@ -77,10 +76,10 @@ class WallissBottomNavBar extends StatelessWidget {
         top: false,
         child: Padding(
           padding: EdgeInsets.only(
-            left: 12,
-            right: 12,
-            top: 10,
-            bottom: bottomPadding > 0 ? 4 : 10,
+            left: 8,
+            right: 8,
+            top: 8,
+            bottom: bottomPadding > 0 ? 4 : 8,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -116,75 +115,46 @@ class _NavBarItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isSelected ? AppColors.monarchPurpleNeon : AppColors.textMutedDark;
+    // Spotify active / inactive color contrast
+    final iconColor = isSelected ? AppColors.monarchPurpleNeon : AppColors.spotifyGrey;
+    final labelColor = isSelected ? Colors.white : AppColors.spotifyGrey;
     final icon = (isSelected && item.activeIcon != null) ? item.activeIcon! : item.icon;
 
     return InkWell(
       onTap: onTap,
-      splashColor: AppColors.monarchPurple.withValues(alpha: 0.15),
+      splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      borderRadius: BorderRadius.circular(20),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOutCubic,
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.monarchPurple.withValues(alpha: 0.12)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(18),
-        ),
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.symmetric(vertical: 6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Icon with Sung Jin-woo purple aura when active
+            // Spotify style icon animation with Sung Jin-woo purple touch
             AnimatedScale(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 180),
               curve: Curves.easeOutBack,
-              scale: isSelected ? 1.15 : 1.0,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  if (isSelected)
-                    Container(
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.monarchPurpleNeon.withValues(alpha: 0.45),
-                            blurRadius: 16,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                    ),
-                  Icon(
-                    icon,
-                    size: 26,
-                    color: color,
-                  ),
-                ],
+              scale: isSelected ? 1.08 : 1.0,
+              child: Icon(
+                icon,
+                size: 25,
+                color: iconColor,
               ),
             ),
-            const SizedBox(height: 6),
-            // Text Label
-            AnimatedDefaultTextStyle(
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOut,
+            const SizedBox(height: 5),
+            // Spotify Label styling
+            Text(
+              item.label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: color,
-                fontSize: 12,
+                color: labelColor,
+                fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                letterSpacing: 0.3,
+                letterSpacing: 0.2,
                 fontFamily: 'Inter',
-              ),
-              child: Text(
-                item.label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],

@@ -56,12 +56,22 @@ class _BalanceQrSectionState extends State<BalanceQrSection> with SingleTickerPr
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [AppColors.monarchPurpleNeon, AppColors.monarchPurpleDeep],
+                    colors: [
+                      Color(0xFF2B1D45), // Subtle Sung Jin-woo purple infusion
+                      AppColors.spotifyCard, // Spotify dark surface
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(AppTheme.cardRadius),
-                  boxShadow: AppColors.monarchGlow,
+                  border: Border.all(color: const Color(0xFF382A54), width: 0.8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.4),
+                      blurRadius: 18,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
                 ),
                 child: Row(
                   children: [
@@ -74,8 +84,8 @@ class _BalanceQrSectionState extends State<BalanceQrSection> with SingleTickerPr
                               const Text(
                                 'Solde Walliss',
                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
+                                  color: AppColors.spotifyGrey,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 0.5,
                                 ),
@@ -83,7 +93,7 @@ class _BalanceQrSectionState extends State<BalanceQrSection> with SingleTickerPr
                               const SizedBox(width: 8),
                               Icon(
                                 _isBalanceVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                color: Colors.white.withValues(alpha: 0.7),
+                                color: AppColors.spotifyGrey,
                                 size: 18,
                               ),
                             ],

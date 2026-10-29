@@ -59,13 +59,14 @@ class _MomoServiceTileState extends State<MomoServiceTile> with SingleTickerProv
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: widget.color.withValues(alpha: 0.08),
+                color: AppColors.spotifyCard,
                 shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFF282828), width: 0.8),
                 boxShadow: [
                   BoxShadow(
-                    color: widget.color.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+                    color: widget.color.withValues(alpha: 0.15),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
@@ -80,7 +81,7 @@ class _MomoServiceTileState extends State<MomoServiceTile> with SingleTickerProv
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: AppColors.black,
+                color: Colors.white,
                 height: 1.1,
               ),
             ),
