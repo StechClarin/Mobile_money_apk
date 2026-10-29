@@ -97,16 +97,50 @@ class ServicesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mock Data for Pure Money Transactions & Shop Services
+    // Services list updated for pure money transactions & shop
     final services = [
-      {'title': 'Envoi Argent', 'icon': Icons.send_rounded, 'color': AppColors.monarchPurpleNeon, 'route': AppRoutes.recipientSelection},
-      {'title': 'Boutique', 'icon': Icons.shopping_bag_outlined, 'color': Colors.orangeAccent, 'route': AppRoutes.shop},
-      {'title': 'Scan QR', 'icon': Icons.qr_code_scanner_rounded, 'color': const Color(0xFF1DB954), 'route': AppRoutes.payment},
-      {'title': 'Cartes', 'icon': Icons.credit_card_rounded, 'color': Colors.purpleAccent, 'route': AppRoutes.cards},
-      {'title': 'Dépôt', 'icon': Icons.add_circle_outline_rounded, 'color': Colors.lightBlueAccent, 'route': AppRoutes.payment},
-      {'title': 'Retrait', 'icon': Icons.arrow_circle_down_rounded, 'color': Colors.tealAccent, 'route': AppRoutes.payment},
-      {'title': 'Paiement', 'icon': Icons.storefront_outlined, 'color': Colors.amberAccent, 'route': AppRoutes.shop},
-      {'title': 'Historique', 'icon': Icons.receipt_long_rounded, 'color': AppColors.spotifyGrey, 'route': AppRoutes.transactions},
+      {
+        'title': 'Envoi Argent',
+        'icon': Icons.send_rounded,
+        'color': AppColors.monarchPurpleNeon,
+        'action': () => context.push(AppRoutes.recipientSelection),
+      },
+      {
+        'title': 'Boutique',
+        'icon': Icons.shopping_bag_outlined,
+        'color': Colors.orangeAccent,
+        'action': () => context.push(AppRoutes.shop),
+      },
+      {
+        'title': 'Cartes',
+        'icon': Icons.credit_card_rounded,
+        'color': Colors.purpleAccent,
+        'action': () => context.push(AppRoutes.cards),
+      },
+      {
+        'title': 'Paiement',
+        'icon': Icons.storefront_outlined,
+        'color': Colors.amberAccent,
+        'action': () => context.push(AppRoutes.payment),
+      },
+      {
+        'title': 'Cadeaux',
+        'icon': Icons.card_giftcard_rounded,
+        'color': const Color(0xFFEC4899), // Neon Pink festive
+        'action': () => _showGiftSheet(context),
+      },
+      {
+        'title': 'Transport',
+        'icon': Icons.directions_bus_rounded,
+        'color': const Color(0xFF00E5FF), // Electric Cyan
+        'action': () => _showTransportSheet(context),
+      },
+      {
+        'title': 'Historique',
+        'icon': Icons.receipt_long_rounded,
+        'color': AppColors.spotifyGrey,
+        'action': () => context.push(AppRoutes.transactions),
+      },
     ];
 
     return GridView.builder(
@@ -131,12 +165,128 @@ class ServicesGrid extends StatelessWidget {
           title: service['title'] as String,
           icon: service['icon'] as IconData,
           color: service['color'] as Color,
-          onTap: () {
-            final route = service['route'] as String?;
-            if (route != null) {
-              context.push(route);
-            }
-          },
+          onTap: service['action'] as VoidCallback,
+        );
+      },
+    );
+  }
+
+  void _showGiftSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.spotifyCard,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEC4899).withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.card_giftcard_rounded, color: Color(0xFFEC4899), size: 26),
+                  ),
+                  const SizedBox(width: 14),
+                  const Text(
+                    'Envoyer un Cadeau Walliss',
+                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Envoyez de l\'argent avec une enveloppe animée et un mot personnalisé pour faire plaisir à vos proches.',
+                style: TextStyle(color: AppColors.spotifyGrey, fontSize: 13),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.push(AppRoutes.recipientSelection);
+                },
+                icon: const Icon(Icons.favorite_rounded, color: Colors.white, size: 20),
+                label: const Text('Choisir le bénéficiaire', style: TextStyle(fontWeight: FontWeight.bold)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFEC4899),
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showTransportSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.spotifyCard,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF00E5FF).withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.directions_bus_rounded, color: Color(0xFF00E5FF), size: 26),
+                  ),
+                  const SizedBox(width: 14),
+                  const Text(
+                    'Paiement Transport',
+                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Réglez vos trajets en toute simplicité (Bus interurbains, Taxis, TER, Covoiturage certifié).',
+                style: TextStyle(color: AppColors.spotifyGrey, fontSize: 13),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.push(
+                    AppRoutes.payment,
+                    extra: {'name': 'Agence de Voyage Express', 'number': '699 00 11 22'},
+                  );
+                },
+                icon: const Icon(Icons.confirmation_number_outlined, color: Colors.black, size: 20),
+                label: const Text('Acheter un billet de transport', style: TextStyle(fontWeight: FontWeight.bold)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF00E5FF),
+                  foregroundColor: Colors.black,
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
         );
       },
     );
