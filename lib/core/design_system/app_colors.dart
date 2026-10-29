@@ -92,11 +92,13 @@ class AppColors {
         ),
       ];
 
-  static Gradient get monarchPurpleGradient => const LinearGradient(
+  static const LinearGradient monarchGradient = LinearGradient(
         colors: [monarchPurpleNeon, monarchPurpleDeep],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       );
+
+  static Gradient get monarchPurpleGradient => monarchGradient;
 
   // Spotify Hero Top Subtle Infusion Gradient
   static Gradient get spotifyHeroGradient => LinearGradient(

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mobilemoney/core/theme/app_theme.dart';
-import 'package:mobilemoney/core/design_system/app_colors.dart';
-import 'package:mobilemoney/core/design_system/app_text_styles.dart';
-import 'package:mobilemoney/features/shop/domain/entities/product.dart';
-import 'package:mobilemoney/features/shop/presentation/manager/shop_providers.dart';
-import 'package:mobilemoney/features/shop/presentation/utils/icon_mapper.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/design_system/app_colors.dart';
+import '../../domain/entities/product.dart';
+import '../manager/shop_providers.dart';
+import '../utils/icon_mapper.dart';
 
 class ProductCard extends ConsumerStatefulWidget {
   final Product product;
@@ -58,106 +57,113 @@ class _ProductCardState extends ConsumerState<ProductCard> with SingleTickerProv
           scale: _scaleAnimation,
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
+              color: AppColors.spotifyCard,
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.06),
+                width: 1,
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.02),
-                  blurRadius: 5,
-                  offset: const Offset(0, 2),
+                  color: Colors.black.withValues(alpha: 0.3),
+                  blurRadius: 16,
+                  offset: const Offset(0, 8),
                 ),
               ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Image / Icon Top Area
+                // Top Icon / Preview Area
                 Stack(
                   children: [
                     Container(
-                      height: 120,
+                      height: 125,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            AppColors.primary.withValues(alpha: 0.06),
-                            AppColors.primary.withValues(alpha: 0.02),
+                            AppColors.spotifyElevated,
+                            AppColors.spotifyCard,
                           ],
                         ),
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
                       ),
                       child: Center(
                         child: Hero(
                           tag: 'product_icon_${widget.product.id}',
-                          child: Icon(
-                            IconMapper.getIcon(widget.product.icon),
-                            size: 56,
-                            color: AppColors.primary,
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.monarchPurple.withValues(alpha: 0.15),
+                              border: Border.all(
+                                color: AppColors.monarchPurpleNeon.withValues(alpha: 0.2),
+                              ),
+                            ),
+                            child: Icon(
+                              IconMapper.getIcon(widget.product.icon),
+                              size: 40,
+                              color: AppColors.monarchPurpleNeon,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    // Wishlist Heart
+                    // Wishlist Button
                     Positioned(
-                      top: 12,
-                      right: 12,
+                      top: 10,
+                      right: 10,
                       child: GestureDetector(
                         onTap: () {
                           ref.read(wishlistProvider.notifier).toggleFavorite(widget.product.id);
                         },
                         child: Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(7),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: AppColors.spotifyBlack.withValues(alpha: 0.6),
                             shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.08),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.1),
+                            ),
                           ),
                           child: Icon(
-                            isFavorite ? Icons.favorite : Icons.favorite_border,
-                            size: 18,
-                            color: isFavorite ? Colors.red : AppColors.grey,
+                            isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                            size: 16,
+                            color: isFavorite ? const Color(0xFFEF4444) : Colors.white70,
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                
+
+                // Details Area
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(14),
+                    padding: const EdgeInsets.all(12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           widget.product.category.toUpperCase(),
-                          style: AppTextStyles.caption.copyWith(
+                          style: GoogleFonts.plusJakartaSans(
                             fontSize: 9,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w800,
                             letterSpacing: 1.2,
-                            color: AppColors.grey.withValues(alpha: 0.8),
+                            color: AppColors.spotifyGrey,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 4),
                         Text(
                           widget.product.name,
-                          style: AppTextStyles.bodyMedium.copyWith(
+                          style: GoogleFonts.plusJakartaSans(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            height: 1.2,
+                            fontSize: 13,
+                            color: Colors.white,
+                            height: 1.25,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -165,64 +171,89 @@ class _ProductCardState extends ConsumerState<ProductCard> with SingleTickerProv
                         const Spacer(),
                         Text(
                           '${widget.product.price.toInt()} FCFA',
-                          style: AppTextStyles.price.copyWith(
-                            fontSize: 17,
-                            color: AppColors.primary,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.monarchPurpleNeon,
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        
+                        const SizedBox(height: 10),
+
                         // Action Buttons
                         Row(
                           children: [
                             Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Achat immédiat initié !'),
-                                      behavior: SnackBarBehavior.floating,
+                              child: Container(
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  gradient: AppColors.monarchGradient,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppColors.monarchPurple.withValues(alpha: 0.3),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 3),
                                     ),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.mtnYellow,
-                                  foregroundColor: AppTheme.black,
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                  minimumSize: Size.zero,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                  elevation: 0,
-                                ).copyWith(
-                                  overlayColor: WidgetStateProperty.all(Colors.black.withValues(alpha: 0.05)),
-                                  textStyle: WidgetStateProperty.all(const TextStyle(
-                                    fontSize: 12, 
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Outfit',
-                                  )),
+                                  ],
                                 ),
-                                child: const Text('Acheter'),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Commande de ${widget.product.name} initiée !',
+                                          style: GoogleFonts.plusJakartaSans(color: Colors.white),
+                                        ),
+                                        backgroundColor: AppColors.spotifyElevated,
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    shadowColor: Colors.transparent,
+                                    foregroundColor: Colors.white,
+                                    padding: EdgeInsets.zero,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                  ),
+                                  child: Text(
+                                    'Acheter',
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 6),
                             Material(
-                              color: AppColors.primary.withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(12),
+                              color: AppColors.spotifyElevated,
+                              borderRadius: BorderRadius.circular(10),
                               child: InkWell(
                                 onTap: () {
-                                   ref.read(cartProvider.notifier).addToCart(widget.product);
-                                   ScaffoldMessenger.of(context).showSnackBar(
+                                  ref.read(cartProvider.notifier).addToCart(widget.product);
+                                  ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('${widget.product.name} ajouté au panier'),
+                                      content: Text(
+                                        '${widget.product.name} ajouté au panier',
+                                        style: GoogleFonts.plusJakartaSans(color: Colors.white),
+                                      ),
+                                      backgroundColor: AppColors.spotifyElevated,
                                       duration: const Duration(seconds: 1),
                                       behavior: SnackBarBehavior.floating,
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                     ),
                                   );
                                 },
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(10),
                                 child: const Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Icon(Icons.shopping_bag_outlined, size: 18, color: AppColors.primary),
+                                  padding: EdgeInsets.all(8),
+                                  child: Icon(
+                                    Icons.shopping_bag_outlined,
+                                    size: 18,
+                                    color: AppColors.monarchPurpleNeon,
+                                  ),
                                 ),
                               ),
                             ),
@@ -240,3 +271,4 @@ class _ProductCardState extends ConsumerState<ProductCard> with SingleTickerProv
     );
   }
 }
+

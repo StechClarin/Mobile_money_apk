@@ -95,13 +95,13 @@ class BoutiqueTab extends ConsumerWidget {
           SliverPersistentHeader(
             pinned: true,
             delegate: _SliverAppBarDelegate(
-              minHeight: 60.0,
-              maxHeight: 60.0,
+              minHeight: 56.0,
+              maxHeight: 56.0,
               child: Container(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.spotifyBlack,
                 child: categoriesAsync.when(
                   data: (categories) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: CategoryTabs(
                       categories: categories,
                       selectedCategory: selectedCategory,
@@ -118,17 +118,22 @@ class BoutiqueTab extends ConsumerWidget {
           ),
           productsAsync.when(
             data: (products) => products.isEmpty
-                ? const SliverFillRemaining(
-                    child: Center(child: Text('Aucun produit trouvé')),
+                ? SliverFillRemaining(
+                    child: Center(
+                      child: Text(
+                        'Aucun produit trouvé',
+                        style: TextStyle(color: AppColors.spotifyGrey),
+                      ),
+                    ),
                   )
                 : SliverPadding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
                     sliver: SliverGrid(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 0.55,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
+                        childAspectRatio: 0.58,
+                        crossAxisSpacing: 14,
+                        mainAxisSpacing: 14,
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
@@ -142,10 +147,17 @@ class BoutiqueTab extends ConsumerWidget {
                     ),
                   ),
             loading: () => const SliverFillRemaining(
-              child: Center(child: CircularProgressIndicator()),
+              child: Center(
+                child: CircularProgressIndicator(color: AppColors.monarchPurpleNeon),
+              ),
             ),
             error: (err, stack) => SliverFillRemaining(
-              child: Center(child: Text('Erreur: $err')),
+              child: Center(
+                child: Text(
+                  'Erreur: $err',
+                  style: const TextStyle(color: Colors.redAccent),
+                ),
+              ),
             ),
           ),
         ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobilemoney/core/design_system/app_colors.dart';
-import 'package:mobilemoney/core/design_system/app_text_styles.dart';
 import 'package:mobilemoney/features/shop/presentation/manager/shop_providers.dart';
 import 'package:mobilemoney/features/shop/presentation/widgets/cart_item_tile.dart';
 
@@ -14,10 +14,21 @@ class CartPage extends ConsumerWidget {
     final total = ref.watch(cartProvider.notifier).totalCartPrice;
 
     return Scaffold(
+      backgroundColor: AppColors.spotifyBlack,
       appBar: AppBar(
-        title: const Text('Mon Panier'),
+        backgroundColor: AppColors.spotifyBlack,
+        elevation: 0,
+        title: Text(
+          'Mon Panier Walliss',
+          style: GoogleFonts.plusJakartaSans(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -45,11 +56,35 @@ class CartPage extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.shopping_cart_outlined, size: 80, color: Colors.grey.shade300),
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.spotifyCard,
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+            ),
+            child: const Icon(
+              Icons.shopping_cart_outlined,
+              size: 64,
+              color: AppColors.spotifyGrey,
+            ),
+          ),
           const SizedBox(height: 20),
           Text(
             'Votre panier est vide',
-            style: AppTextStyles.h1.copyWith(color: Colors.grey.shade400),
+            style: GoogleFonts.plusJakartaSans(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Découvrez les équipements Walliss dans la boutique',
+            style: GoogleFonts.plusJakartaSans(
+              color: AppColors.spotifyGrey,
+              fontSize: 13,
+            ),
           ),
         ],
       ),
@@ -58,15 +93,18 @@ class CartPage extends ConsumerWidget {
 
   Widget _buildSummary(BuildContext context, WidgetRef ref, double total) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+        color: AppColors.spotifyCard,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        border: Border(
+          top: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withValues(alpha: 0.4),
             blurRadius: 20,
-            offset: const Offset(0, -5),
+            offset: const Offset(0, -6),
           ),
         ],
       ),
@@ -77,32 +115,66 @@ class CartPage extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Total', style: AppTextStyles.bodyLarge),
+                Text(
+                  'Total à régler',
+                  style: GoogleFonts.plusJakartaSans(
+                    color: AppColors.spotifyGrey,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 Text(
                   '${total.toStringAsFixed(0)} FCFA',
-                  style: AppTextStyles.h1.copyWith(color: AppColors.primary),
+                  style: GoogleFonts.plusJakartaSans(
+                    color: AppColors.monarchPurpleNeon,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-            SizedBox(
+            const SizedBox(height: 20),
+            Container(
               width: double.infinity,
+              height: 54,
+              decoration: BoxDecoration(
+                gradient: AppColors.monarchGradient,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.monarchPurple.withValues(alpha: 0.35),
+                    blurRadius: 14,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
               child: ElevatedButton(
                 onPressed: () {
-                  // Checkout logic
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Commande Walliss validée avec succès !',
+                        style: GoogleFonts.plusJakartaSans(color: Colors.white),
+                      ),
+                      backgroundColor: AppColors.spotifyElevated,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.secondary,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  elevation: 0,
                 ),
-                child: const Text(
+                child: Text(
                   'Passer la commande',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  style: GoogleFonts.plusJakartaSans(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),
@@ -112,3 +184,4 @@ class CartPage extends ConsumerWidget {
     );
   }
 }
+

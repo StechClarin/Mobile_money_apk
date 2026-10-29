@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/design_system/app_colors.dart';
-import '../../../../core/design_system/app_text_styles.dart';
 
 class CategoryTabs extends StatelessWidget {
   final List<String> categories;
@@ -17,29 +17,45 @@ class CategoryTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      height: 38,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: categories.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 12),
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           final category = categories[index];
           final isSelected = category == selectedCategory;
           return GestureDetector(
             onTap: () => onCategorySelected(category),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : AppColors.lightGrey,
+                color: isSelected ? AppColors.monarchPurple : AppColors.spotifyCard,
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: isSelected
+                      ? AppColors.monarchPurpleNeon
+                      : Colors.white.withValues(alpha: 0.08),
+                ),
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: AppColors.monarchPurple.withValues(alpha: 0.35),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]
+                    : null,
               ),
               child: Center(
                 child: Text(
                   category,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: isSelected ? AppColors.secondary : AppColors.grey,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  style: GoogleFonts.plusJakartaSans(
+                    color: isSelected ? Colors.white : AppColors.spotifyGrey,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                    fontSize: 12,
                   ),
                 ),
               ),
@@ -50,3 +66,4 @@ class CategoryTabs extends StatelessWidget {
     );
   }
 }
+

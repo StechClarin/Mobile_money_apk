@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/design_system/app_colors.dart';
 import '../../domain/entities/card_model.dart';
 
 class PaymentCardWidget extends StatelessWidget {
@@ -16,173 +17,277 @@ class PaymentCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: isCompact ? 300 : double.infinity,
-      height: 200,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: card.gradientColors,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          stops: const [0.0, 0.8],
-        ),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: card.gradientColors.first.withValues(alpha: 0.25),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+    return AspectRatio(
+      aspectRatio: isCompact ? 1.58 : 1.62,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: LinearGradient(
+            colors: card.gradientColors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: Stack(
-          children: [
-            // Noise/Texture Overlay (Subtle)
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.03,
-                child: Image.network(
-                  'https://www.transparenttextures.com/patterns/carbon-fibre.png',
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => const SizedBox(),
-                ),
-              ),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.12),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: card.gradientColors.first.withValues(alpha: 0.35),
+              blurRadius: 24,
+              offset: const Offset(0, 12),
             ),
-            
-            // Glassmorphism highlight
-            Positioned(
-              top: -50,
-              left: -50,
-              child: Container(
-                width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                    colors: [
-                      Colors.white.withValues(alpha: 0.15),
-                      Colors.transparent,
-                    ],
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Stack(
+            children: [
+              // 1. Sleek geometric background overlay
+              Positioned(
+                top: -60,
+                right: -60,
+                child: Container(
+                  width: 220,
+                  height: 220,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        AppColors.monarchPurpleNeon.withValues(alpha: 0.25),
+                        Colors.transparent,
+                      ],
+                    ),
                   ),
-                  shape: BoxShape.circle,
                 ),
               ),
-            ),
-            
-            // Content
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: onTap,
-                child: Padding(
-                  padding: const EdgeInsets.all(28.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                           _buildBrandLogo(),
-                          const Icon(Icons.contactless_outlined, color: Colors.white, size: 28),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      // Chip Icon
-                      Container(
-                        width: 45,
-                        height: 35,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.yellow.shade700,
-                              Colors.yellow.shade200,
-                              Colors.yellow.shade800,
+              Positioned(
+                bottom: -80,
+                left: -40,
+                child: Container(
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        Colors.white.withValues(alpha: 0.08),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              // 2. Interactive Card Body
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: onTap,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Top row: Brand & Status / Contactless
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            _buildBrandLogo(),
+                            Row(
+                              children: [
+                                if (card.isVirtual)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    margin: const EdgeInsets.only(right: 8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: 0.12),
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                        color: Colors.white.withValues(alpha: 0.2),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'VIRTUELLE',
+                                      style: GoogleFonts.plusJakartaSans(
+                                        color: Colors.white,
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: 0.8,
+                                      ),
+                                    ),
+                                  ),
+                                const Icon(
+                                  Icons.contactless_rounded,
+                                  color: Colors.white70,
+                                  size: 24,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+
+                        // Middle: Holographic Smart Chip & Card Name
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Metallic Smart Chip
+                            Container(
+                              width: 44,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFFFFDF7A),
+                                    Color(0xFFE5A823),
+                                    Color(0xFFFFDF7A),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(6),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.3),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: CustomPaint(
+                                painter: _SmartChipPainter(),
+                              ),
+                            ),
+                            Text(
+                              card.cardName,
+                              style: GoogleFonts.plusJakartaSans(
+                                color: Colors.white.withValues(alpha: 0.75),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // Card Number
+                        Text(
+                          card.cardNumber,
+                          style: GoogleFonts.plusJakartaSans(
+                            color: Colors.white,
+                            fontSize: isCompact ? 16 : 19,
+                            letterSpacing: 3.2,
+                            fontWeight: FontWeight.w700,
+                            shadows: const [
+                              Shadow(
+                                color: Colors.black45,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
                             ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
                           ),
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: Colors.black12),
                         ),
-                        child: CustomPaint(
-                          painter: ChipPainter(),
+
+                        // Bottom row: Holder & Expiration
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'TITULAIRE',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    color: Colors.white.withValues(alpha: 0.6),
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 1,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  card.holderName.toUpperCase(),
+                                  style: GoogleFonts.plusJakartaSans(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'EXPIRE',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    color: Colors.white.withValues(alpha: 0.6),
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 1,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  card.expiryDate,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        card.cardNumber,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          letterSpacing: 3,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Outfit',
-                          shadows: [
-                            Shadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2)),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              // 3. Frozen overlay if locked
+              if (card.isFrozen)
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.75),
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.spotifyElevated,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: AppColors.monarchPurpleNeon.withValues(alpha: 0.5),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.lock_rounded, color: AppColors.monarchPurpleNeon, size: 16),
+                            const SizedBox(width: 8),
+                            Text(
+                              'CARTE TEMPORAIREMENT GELÉE',
+                              style: GoogleFonts.plusJakartaSans(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'CARD HOLDER',
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.7),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 1,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                card.holderName.toUpperCase(),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Outfit',
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'EXPIRES',
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.7),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 1,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                card.expiryDate,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Outfit',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -190,83 +295,113 @@ class PaymentCardWidget extends StatelessWidget {
 
   Widget _buildBrandLogo() {
     switch (card.type) {
+      case PaymentCardType.walliss:
+      case PaymentCardType.momo:
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(5),
+              decoration: const BoxDecoration(
+                gradient: AppColors.monarchGradient,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.bolt_rounded, size: 14, color: Colors.white),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'WALLISS',
+              style: GoogleFonts.plusJakartaSans(
+                color: Colors.white,
+                fontWeight: FontWeight.w900,
+                fontSize: 16,
+                letterSpacing: 2,
+              ),
+            ),
+          ],
+        );
       case PaymentCardType.visa:
-        return const Text(
+        return Text(
           'VISA',
-          style: TextStyle(
+          style: GoogleFonts.plusJakartaSans(
             color: Colors.white,
-            fontSize: 26,
+            fontSize: 22,
             fontWeight: FontWeight.w900,
             fontStyle: FontStyle.italic,
-            fontFamily: 'Outfit',
+            letterSpacing: 1.5,
           ),
         );
       case PaymentCardType.mastercard:
-         return SizedBox(
-           width: 50,
-           height: 30,
-           child: Stack(
-             children: [
-               Container(
-                 width: 30,
-                 height: 30,
-                 decoration: BoxDecoration(
-                   color: Colors.red.withValues(alpha: 0.9),
-                   shape: BoxShape.circle,
-                 ),
-               ),
-               Positioned(
-                 left: 18,
-                 child: Container(
-                   width: 30,
-                   height: 30,
-                   decoration: BoxDecoration(
-                     color: Colors.orange.withValues(alpha: 0.9),
-                     shape: BoxShape.circle,
-                   ),
-                 ),
-               ),
-             ],
-           ),
-         );
-      case PaymentCardType.momo:
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppTheme.mtnYellow,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: const Text(
-            'MoMo',
-            style: TextStyle(
-              color: AppTheme.black,
-              fontWeight: FontWeight.w900,
-              fontSize: 14,
-              fontFamily: 'Outfit',
-            ),
+        return SizedBox(
+          width: 44,
+          height: 26,
+          child: Stack(
+            children: [
+              Container(
+                width: 26,
+                height: 26,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEB001B).withValues(alpha: 0.9),
+                  shape: BoxShape.circle,
+                ),
+              ),
+              Positioned(
+                left: 16,
+                child: Container(
+                  width: 26,
+                  height: 26,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF79E1B).withValues(alpha: 0.9),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+            ],
           ),
         );
     }
   }
 }
 
-class ChipPainter extends CustomPainter {
+class _SmartChipPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.black26
+      ..color = Colors.black.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.5;
+      ..strokeWidth = 0.8;
 
-    for (var i = 1; i < 4; i++) {
-      canvas.drawLine(Offset(size.width * i / 4, 0), Offset(size.width * i / 4, size.height), paint);
-      canvas.drawLine(Offset(0, size.height * i / 4), Offset(size.width, size.height * i / 4), paint);
-    }
-    
-    final rrect = RRect.fromLTRBR(size.width * 0.2, size.height * 0.2, size.width * 0.8, size.height * 0.8, const Radius.circular(2));
-    canvas.drawRRect(rrect, paint);
+    // Horizontal divider
+    canvas.drawLine(
+      Offset(0, size.height * 0.5),
+      Offset(size.width, size.height * 0.5),
+      paint,
+    );
+    // Vertical left & right lines
+    canvas.drawLine(
+      Offset(size.width * 0.35, 0),
+      Offset(size.width * 0.35, size.height),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(size.width * 0.65, 0),
+      Offset(size.width * 0.65, size.height),
+      paint,
+    );
+
+    // Inner chip circuit square
+    final rect = RRect.fromRectAndRadius(
+      Rect.fromCenter(
+        center: Offset(size.width * 0.5, size.height * 0.5),
+        width: size.width * 0.45,
+        height: size.height * 0.45,
+      ),
+      const Radius.circular(3),
+    );
+    canvas.drawRRect(rect, paint);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+

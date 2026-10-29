@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobilemoney/features/shop/domain/entities/cart_item.dart';
 import 'package:mobilemoney/features/shop/presentation/manager/shop_providers.dart';
 import 'package:mobilemoney/features/shop/presentation/utils/icon_mapper.dart';
-import 'package:mobilemoney/core/design_system/app_text_styles.dart';
 import 'package:mobilemoney/core/design_system/app_colors.dart';
 
 class CartItemTile extends ConsumerWidget {
@@ -17,14 +17,17 @@ class CartItemTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.spotifyCard,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.05),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -33,31 +36,42 @@ class CartItemTile extends ConsumerWidget {
       child: Row(
         children: [
           Container(
-            width: 70,
-            height: 70,
+            width: 64,
+            height: 64,
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
+              color: AppColors.spotifyElevated,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: AppColors.monarchPurpleNeon.withValues(alpha: 0.2),
+              ),
             ),
             child: Icon(
               IconMapper.getIcon(item.product.icon),
-              color: AppColors.primary,
-              size: 30,
+              color: AppColors.monarchPurpleNeon,
+              size: 28,
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   item.product.name,
-                  style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                  style: GoogleFonts.plusJakartaSans(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '${item.product.price.toStringAsFixed(0)} FCFA',
-                  style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primary),
+                  style: GoogleFonts.plusJakartaSans(
+                    color: AppColors.monarchPurpleNeon,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13,
+                  ),
                 ),
               ],
             ),
@@ -65,20 +79,24 @@ class CartItemTile extends ConsumerWidget {
           Row(
             children: [
               _buildActionButton(
-                icon: Icons.remove,
+                icon: Icons.remove_rounded,
                 onTap: () {
                   ref.read(cartProvider.notifier).updateQuantity(item.product.id, item.quantity - 1);
                 },
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
                   '${item.quantity}',
-                  style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                  style: GoogleFonts.plusJakartaSans(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
                 ),
               ),
               _buildActionButton(
-                icon: Icons.add,
+                icon: Icons.add_rounded,
                 onTap: () {
                   ref.read(cartProvider.notifier).updateQuantity(item.product.id, item.quantity + 1);
                 },
@@ -93,14 +111,17 @@ class CartItemTile extends ConsumerWidget {
   Widget _buildActionButton({required IconData icon, required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
       child: Container(
-        padding: const EdgeInsets.all(4),
+        padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
+          color: AppColors.spotifyElevated,
+          border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(icon, size: 18, color: Colors.grey.shade600),
+        child: Icon(icon, size: 16, color: Colors.white),
       ),
     );
   }
 }
+
