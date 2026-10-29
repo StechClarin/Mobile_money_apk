@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/design_system/app_colors.dart';
-import '../../../../core/design_system/app_text_styles.dart';
 
 class ConsoStatus extends StatelessWidget {
   const ConsoStatus({super.key});

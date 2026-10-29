@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../core/theme/app_theme.dart';
+import '../../../../../core/design_system/app_colors.dart';
 import '../../widgets/promo_carousel.dart';
 import '../../widgets/services_grid.dart';
 import '../../widgets/balance_qr_section.dart'; // New section
@@ -25,21 +25,49 @@ class _MoneyTabState extends State<MoneyTab> with AutomaticKeepAliveClientMixin 
       key: const PageStorageKey('MoneyTab'),
       slivers: [
         SliverAppBar(
-          backgroundColor: AppTheme.mtnYellow,
+          backgroundColor: AppColors.darkScaffold,
           leading: IconButton(
-            icon: const Icon(Icons.menu, color: AppTheme.black),
+            icon: const Icon(Icons.menu_rounded, color: AppColors.monarchPurpleNeon),
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },
           ),
-          title: const Text(
-            '677 00 00 00', // Center connected number
-            style: TextStyle(
-              color: AppTheme.black,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                margin: const EdgeInsets.only(right: 8),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.monarchPurpleNeon,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.monarchPurpleNeon,
+                      blurRadius: 8,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+              ),
+              const Text(
+                'Walliss Pay',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.notifications_none_rounded, color: AppColors.monarchPurpleNeon),
+              onPressed: () {},
+            ),
+          ],
           centerTitle: true,
           floating: true,
           pinned: true,

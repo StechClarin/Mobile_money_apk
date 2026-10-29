@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/design_system/app_colors.dart';
 import '../../domain/entities/card_model.dart';
 
 class PaymentCardWidget extends StatelessWidget {

@@ -55,9 +55,13 @@ class _BalanceQrSectionState extends State<BalanceQrSection> with SingleTickerPr
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  gradient: AppColors.primaryGradient,
+                  gradient: const LinearGradient(
+                    colors: [AppColors.monarchPurpleNeon, AppColors.monarchPurpleDeep],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   borderRadius: BorderRadius.circular(AppTheme.cardRadius),
-                  boxShadow: AppColors.softShadow,
+                  boxShadow: AppColors.monarchGlow,
                 ),
                 child: Row(
                   children: [
@@ -68,9 +72,9 @@ class _BalanceQrSectionState extends State<BalanceQrSection> with SingleTickerPr
                           Row(
                             children: [
                               const Text(
-                                'Solde principal',
+                                'Solde Walliss',
                                 style: TextStyle(
-                                  color: AppColors.black,
+                                  color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 0.5,
@@ -79,7 +83,7 @@ class _BalanceQrSectionState extends State<BalanceQrSection> with SingleTickerPr
                               const SizedBox(width: 8),
                               Icon(
                                 _isBalanceVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                color: AppColors.black.withValues(alpha: 0.4),
+                                color: Colors.white.withValues(alpha: 0.7),
                                 size: 18,
                               ),
                             ],
@@ -91,10 +95,11 @@ class _BalanceQrSectionState extends State<BalanceQrSection> with SingleTickerPr
                               _isBalanceVisible ? '145 000 FCFA' : '•••••• FCFA',
                               key: ValueKey(_isBalanceVisible),
                               style: const TextStyle(
-                                color: AppColors.black,
+                                color: Colors.white,
                                 fontSize: 26,
                                 fontWeight: FontWeight.w900,
                                 fontFamily: 'Outfit',
+                                letterSpacing: 0.5,
                               ),
                             ),
                           ),
@@ -111,18 +116,18 @@ class _BalanceQrSectionState extends State<BalanceQrSection> with SingleTickerPr
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
+                              color: Colors.black.withValues(alpha: 0.25),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             ),
                           ],
                         ),
                         child: QrImageView(
-                          data: 'https://mobilemoney.mtn.cm',
+                          data: 'https://walliss.app/pay',
                           version: QrVersions.auto,
                           size: 64.0,
-                          eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.circle, color: AppColors.black),
-                          dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.circle, color: AppColors.black),
+                          eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.circle, color: AppColors.monarchPurpleDeep),
+                          dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.circle, color: AppColors.darkScaffold),
                         ),
                       ),
                     ),
@@ -131,54 +136,8 @@ class _BalanceQrSectionState extends State<BalanceQrSection> with SingleTickerPr
               ),
             ),
           ),
-          
-          const SizedBox(height: 24),
-          
-          // 2. Modern Quick Actions Container
-          // Container(
-          //   padding: const EdgeInsets.all(20),
-          //   decoration: BoxDecoration(
-          //     color: Colors.white,
-          //     borderRadius: BorderRadius.circular(AppTheme.cardRadius),
-          //     boxShadow: AppColors.softShadow,
-          //   ),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //     children: [
-          //       _buildQuickAction(Icons.qr_code_scanner, 'Scanner', Colors.blue),
-          //       _buildQuickAction(Icons.account_balance_wallet_outlined, 'Dépôt', Colors.green),
-          //       _buildQuickAction(Icons.payment_outlined, 'Paiement', Colors.orange),
-          //       _buildQuickAction(Icons.more_horiz, 'Plus', AppColors.grey),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
-    );
-  }
-
-  Widget _buildQuickAction(IconData icon, String label, Color color) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Icon(icon, color: color, size: 24),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: AppColors.black,
-          ),
-        ),
-      ],
     );
   }
 
@@ -186,9 +145,10 @@ class _BalanceQrSectionState extends State<BalanceQrSection> with SingleTickerPr
     AppTransitions.showAppDialog(
       context: context,
       child: Dialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.darkCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
+          side: BorderSide(color: AppColors.monarchPurple.withValues(alpha: 0.3)),
         ),
         child: Padding(
           padding: const EdgeInsets.all(32.0),
@@ -196,27 +156,48 @@ class _BalanceQrSectionState extends State<BalanceQrSection> with SingleTickerPr
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
-                'Mon Code QR',
+                'Mon Code Walliss QR',
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.black,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Scannez pour recevoir instantanément',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.white.withValues(alpha: 0.6),
                 ),
               ),
               const SizedBox(height: 24),
-              QrImageView(
-                data: 'https://mobilemoney.mtn.cm',
-                version: QrVersions.auto,
-                size: 200.0,
-                eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square, color: AppColors.black),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: AppColors.monarchGlow,
+                ),
+                child: QrImageView(
+                  data: 'https://walliss.app/pay',
+                  version: QrVersions.auto,
+                  size: 200.0,
+                  eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square, color: AppColors.darkScaffold),
+                ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 28),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.monarchPurpleDeep,
+                  foregroundColor: Colors.white,
                   minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
-                child: const Text('Fermer'),
+                child: const Text('Fermer', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
           ),

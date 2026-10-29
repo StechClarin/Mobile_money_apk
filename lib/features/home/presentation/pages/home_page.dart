@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants.dart';
-import 'package:mobilemoney/core/design_system/app_colors.dart';
-import '../../../../core/theme/app_theme.dart';
+import '../../../../core/design_system/app_colors.dart';
+import '../../../../core/design_system/walliss_bottom_nav_bar.dart';
 import 'tabs/money_tab.dart';
 import 'tabs/ma_ligne_tab.dart';
 import 'tabs/boutique_tab.dart';
+import '../../../account/presentation/pages/account_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,54 +16,71 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 1; // Default to Money Tab
+  int _currentIndex = 0; // Default to Balance (0: Balance, 1: Market, 2: Exchange, 3: Setting)
 
   final List<Widget> _pages = [
-    const MaLigneTab(),
-    const MoneyTab(),
-    const BoutiqueTab(),
-    const Scaffold(body: Center(child: Text('Me Tab'))), // Placeholder for Me Tab
+    const MoneyTab(),      // 0: Balance
+    const BoutiqueTab(),   // 1: Market
+    const MaLigneTab(),    // 2: Exchange
+    const AccountPage(),   // 3: Setting
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.darkScaffold,
       drawer: Drawer(
+        backgroundColor: AppColors.darkCard,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: const BoxDecoration(color: AppTheme.mtnYellow),
+              decoration: BoxDecoration(
+                gradient: AppColors.monarchPurpleGradient,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person, color: AppColors.primary, size: 40),
+                    backgroundColor: AppColors.darkCard,
+                    child: const Icon(Icons.person, color: AppColors.monarchPurpleNeon, size: 40),
                   ),
                   const SizedBox(height: 10),
                   const Text(
-                    'Yello User',
-                    style: TextStyle(color: AppTheme.black, fontWeight: FontWeight.bold),
+                    'Walliss User',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(
-                    '677 00 00 00',
-                    style: TextStyle(color: AppTheme.black.withValues(alpha: 0.7)),
+                    '+237 677 00 00 00',
+                    style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13),
                   ),
                 ],
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.history),
-              title: const Text('Historique'),
-              onTap: () {},
+              leading: const Icon(Icons.history, color: AppColors.monarchPurpleNeon),
+              title: const Text('Historique', style: TextStyle(color: AppColors.textLight)),
+              onTap: () {
+                Navigator.pop(context);
+                context.push(AppRoutes.transactions);
+              },
             ),
             ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Paramètres'),
-              onTap: () {},
+              leading: const Icon(Icons.credit_card, color: AppColors.monarchPurpleNeon),
+              title: const Text('Cartes Walliss', style: TextStyle(color: AppColors.textLight)),
+              onTap: () {
+                Navigator.pop(context);
+                context.push(AppRoutes.cards);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings, color: AppColors.monarchPurpleNeon),
+              title: const Text('Paramètres', style: TextStyle(color: AppColors.textLight)),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() => _currentIndex = 3);
+              },
             ),
           ],
         ),
@@ -71,81 +89,30 @@ class _HomePageState extends State<HomePage> {
         index: _currentIndex,
         children: _pages,
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 20,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          selectedItemColor: AppTheme.mtnYellow,
-          unselectedItemColor: Colors.grey.shade400,
-          backgroundColor: Colors.white,
-          elevation: 0, // Remove default elevation to use custom shadow
-          type: BottomNavigationBarType.fixed,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
-          items: [
-            BottomNavigationBarItem(
-              icon: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: _currentIndex == 0 ? BoxDecoration(color: AppTheme.mtnYellow.withValues(alpha: 0.1), shape: BoxShape.circle) : null,
-                child: const Icon(Icons.show_chart),
-              ),
-              label: 'Ma Ligne',
-            ),
-            BottomNavigationBarItem(
-              icon: Container(
-                padding: const EdgeInsets.all(8),
-                 decoration: _currentIndex == 1 ? BoxDecoration(color: AppTheme.mtnYellow.withValues(alpha: 0.1), shape: BoxShape.circle) : null,
-                child: const Icon(Icons.account_balance_wallet),
-              ),
-              label: 'Money',
-            ),
-            BottomNavigationBarItem(
-              icon: Container(
-                padding: const EdgeInsets.all(8),
-                 decoration: _currentIndex == 2 ? BoxDecoration(color: AppTheme.mtnYellow.withValues(alpha: 0.1), shape: BoxShape.circle) : null,
-                child: const Icon(Icons.shopping_bag_outlined),
-              ),
-              label: 'Boutique',
-            ),
-            BottomNavigationBarItem(
-              icon: Container(
-                padding: const EdgeInsets.all(8),
-                 decoration: _currentIndex == 3 ? BoxDecoration(color: AppTheme.mtnYellow.withValues(alpha: 0.1), shape: BoxShape.circle) : null,
-                child: const Icon(Icons.person_outline),
-              ),
-              label: 'Me',
-            ),
-          ],
-        ),
+      bottomNavigationBar: WallissBottomNavBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
-      floatingActionButton: _currentIndex == 1 // Only show FAB on Money Tab
+      floatingActionButton: _currentIndex == 0 // Show Scan FAB on Balance tab
           ? FloatingActionButton.extended(
               onPressed: () {
-                // Simulate scan capture and navigate to payment
                 context.push(
                   AppRoutes.payment,
                   extra: {'name': 'Scan Captured: Jean D.', 'number': '677 88 99 00'},
                 );
               },
-              backgroundColor: AppTheme.mtnYellow,
-              foregroundColor: AppTheme.black,
-              icon: const Icon(Icons.qr_code_scanner),
-              label: const Text('Scan'),
-              elevation: 4,
+              backgroundColor: AppColors.monarchPurpleDeep,
+              foregroundColor: Colors.white,
+              elevation: 6,
+              icon: const Icon(Icons.qr_code_scanner, color: AppColors.monarchPurpleNeon),
+              label: const Text(
+                'Scan & Pay',
+                style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 0.5),
+              ),
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

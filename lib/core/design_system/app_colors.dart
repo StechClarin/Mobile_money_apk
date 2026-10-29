@@ -50,4 +50,48 @@ class AppColors {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       );
+
+  // Walliss Dark & Sung Jin-woo (Shadow Monarch) Palette
+  static const Color monarchPurple = Color(0xFF8B5CF6); // Electric Shadow Purple
+  static const Color monarchPurpleNeon = Color(0xFFA855F7); // High-voltage Violet
+  static const Color monarchPurpleDeep = Color(0xFF6D28D9); // Deep Monarch Purple
+  static const Color monarchPurpleAura = Color(0xFF7C3AED); // Radiant Shadow Aura
+  static const Color monarchCyan = Color(0xFF38BDF8); // Spectral Eye Glow
+
+  // Dark Surface & Backgrounds
+  static const Color darkScaffold = Color(0xFF0A0912); // Void / Abyss Black
+  static const Color darkCard = Color(0xFF131122); // Dark Velvet Obsidian
+  static const Color darkElevated = Color(0xFF1C1833); // Elevated Dock Surface
+  static const Color darkBorder = Color(0xFF282347); // Subtle Shadow Rift Border
+  static const Color textMutedDark = Color(0xFF7A7893); // Sleek Inactive Grey
+  static const Color textLight = Color(0xFFF1F0F7);
+
+  // Sung Jin-woo Shadow Glow
+  static List<BoxShadow> get monarchGlow => [
+        BoxShadow(
+          color: monarchPurple.withValues(alpha: 0.35),
+          blurRadius: 24,
+          offset: const Offset(0, 6),
+          spreadRadius: -2,
+        ),
+      ];
+
+  static List<BoxShadow> get navBarDarkShadow => [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.65),
+          blurRadius: 30,
+          offset: const Offset(0, -8),
+        ),
+        BoxShadow(
+          color: monarchPurple.withValues(alpha: 0.18),
+          blurRadius: 20,
+          offset: const Offset(0, -2),
+        ),
+      ];
+
+  static Gradient get monarchPurpleGradient => const LinearGradient(
+        colors: [monarchPurpleNeon, monarchPurpleDeep],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
 }
