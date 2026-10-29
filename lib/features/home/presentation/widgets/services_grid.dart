@@ -118,6 +118,12 @@ class ServicesGrid extends StatelessWidget {
         'action': () => context.push(AppRoutes.cards),
       },
       {
+        'title': 'Coffre',
+        'icon': Icons.shield_rounded,
+        'color': const Color(0xFFF59E0B), // Warm Gold
+        'action': () => _showVaultSheet(context),
+      },
+      {
         'title': 'Paiement',
         'icon': Icons.storefront_outlined,
         'color': Colors.amberAccent,
@@ -291,4 +297,98 @@ class ServicesGrid extends StatelessWidget {
       },
     );
   }
+
+  void _showVaultSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.spotifyCard,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.shield_rounded, color: Color(0xFFF59E0B), size: 26),
+                  ),
+                  const SizedBox(width: 14),
+                  const Text(
+                    'Coffre-fort Sécurisé',
+                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.spotifyBlack,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFF282828)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Solde Verrouillé', style: TextStyle(color: AppColors.spotifyGrey, fontSize: 12)),
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          '350 000 FCFA',
+                          style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1DB954).withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Text(
+                            '+5.5% / an',
+                            style: TextStyle(color: Color(0xFF1DB954), fontWeight: FontWeight.bold, fontSize: 11),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              const Text(
+                'Mettez votre argent à l\'abri des dépenses impulsives et générez des rendements garantis quotidiens.',
+                style: TextStyle(color: AppColors.spotifyGrey, fontSize: 13),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.lock_outline_rounded, color: Colors.black, size: 20),
+                label: const Text('Déposer dans le coffre', style: TextStyle(fontWeight: FontWeight.bold)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFF59E0B),
+                  foregroundColor: Colors.black,
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
+

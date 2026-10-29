@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../../../core/constants.dart';
+import '../../../../core/design_system/app_colors.dart';
 
 class TransactionReceiptPage extends StatelessWidget {
   final Map<String, dynamic> transactionDetails;
@@ -19,23 +19,18 @@ class TransactionReceiptPage extends StatelessWidget {
     final amount = transactionDetails['amount'] ?? 0.0;
     final fees = transactionDetails['fees'] ?? 0.0;
     final total = amount + fees;
-    final reference = 'MTN-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
+    final reference = 'WAL-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
     final date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now());
 
-    // Show specialized toast after build
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showSpecializedToast(context);
-    });
-
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: AppColors.spotifyBlack,
       appBar: AppBar(
-        title: const Text('Reçu de transaction'),
-        backgroundColor: Colors.white,
-        foregroundColor: AppTheme.black,
+        title: const Text('Reçu officiel Walliss', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+        backgroundColor: AppColors.spotifyBlack,
+        foregroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(Icons.close_rounded, color: Colors.white),
           onPressed: () => context.go(AppRoutes.home),
         ),
       ),
@@ -43,16 +38,32 @@ class TransactionReceiptPage extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            // Success Icon
-            const CircleAvatar(
-              radius: 36,
-              backgroundColor: Colors.green,
-              child: Icon(Icons.check, color: Colors.white, size: 40),
+            // Success Icon Spotify Green
+            Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                color: const Color(0xFF1DB954).withValues(alpha: 0.15),
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFF1DB954), width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF1DB954).withValues(alpha: 0.3),
+                    blurRadius: 18,
+                  ),
+                ],
+              ),
+              child: const Icon(Icons.check_rounded, color: Color(0xFF1DB954), size: 40),
             ),
             const SizedBox(height: 16),
             const Text(
-              'Transfert réussi !',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green),
+              'Transfert Réussi !',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'Fonds transférés instantanément par Walliss',
+              style: TextStyle(color: AppColors.spotifyGrey, fontSize: 13),
             ),
             const SizedBox(height: 32),
 
@@ -60,58 +71,69 @@ class TransactionReceiptPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
+                color: AppColors.spotifyCard,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF282828), width: 0.8),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
+                    color: Colors.black.withValues(alpha: 0.4),
                     blurRadius: 20,
+                    offset: const Offset(0, 8),
                   ),
                 ],
               ),
               child: Column(
                 children: [
                   _buildReceiptRow('Référence', reference, isBold: true),
-                  _buildReceiptRow('Date', date),
-                  const Divider(height: 32),
-                  _buildReceiptRow('Destinataire', name, isBold: true),
+                  _buildReceiptRow('Date & Heure', date),
+                  const Divider(height: 28, color: Color(0xFF282828)),
+                  _buildReceiptRow('Bénéficiaire', name, isBold: true),
                   _buildReceiptRow('Numéro', number),
-                  const Divider(height: 32),
-                  _buildReceiptRow('Montant envoyé', '${NumberFormat('#,##0').format(amount)} FCFA'),
-                  _buildReceiptRow('Frais de service', '${NumberFormat('#,##0').format(fees)} FCFA'),
-                  const Divider(height: 32),
+                  const Divider(height: 28, color: Color(0xFF282828)),
+                  _buildReceiptRow('Montant net', '${NumberFormat('#,##0').format(amount)} FCFA'),
+                  _buildReceiptRow('Frais de service (1%)', '${NumberFormat('#,##0').format(fees)} FCFA'),
+                  const Divider(height: 28, color: Color(0xFF282828)),
                   _buildReceiptRow(
-                    'Total prélevé',
+                    'Total débité',
                     '${NumberFormat('#,##0').format(total)} FCFA',
                     isBold: true,
-                    valueColor: AppTheme.black,
+                    valueColor: AppColors.monarchPurpleNeon,
                     fontSize: 18,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 36),
 
             // Actions
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.share_outlined),
-                label: const Text('Partager le reçu'),
+                onPressed: () => context.go(AppRoutes.home),
+                icon: const Icon(Icons.done_all_rounded, color: Colors.white, size: 20),
+                label: const Text('Terminer', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.mtnYellow,
-                  foregroundColor: AppTheme.black,
+                  backgroundColor: AppColors.monarchPurpleNeon,
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   elevation: 0,
                 ),
               ),
             ),
             const SizedBox(height: 12),
-            TextButton(
-              onPressed: () => context.go(AppRoutes.home),
-              child: const Text('Retour à l\'accueil', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.share_outlined, color: Colors.white, size: 18),
+                label: const Text('Partager le reçu officiel', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  side: const BorderSide(color: Color(0xFF382A54), width: 1),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+              ),
             ),
           ],
         ),
@@ -119,80 +141,35 @@ class TransactionReceiptPage extends StatelessWidget {
     );
   }
 
-  Widget _buildReceiptRow(String label, String value, {bool isBold = false, Color? valueColor, double fontSize = 14}) {
+  Widget _buildReceiptRow(
+    String label,
+    String value, {
+    bool isBold = false,
+    Color? valueColor,
+    double fontSize = 14,
+  }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
+          Text(
+            label,
+            style: const TextStyle(
+              color: AppColors.spotifyGrey,
+              fontSize: 13,
+            ),
+          ),
           Text(
             value,
             style: TextStyle(
-              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-              color: valueColor ?? AppTheme.black,
+              color: valueColor ?? Colors.white,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
               fontSize: fontSize,
             ),
           ),
         ],
       ),
     );
-  }
-
-  void _showSpecializedToast(BuildContext context) {
-    final overlay = Overlay.of(context);
-    late OverlayEntry entry;
-    
-    entry = OverlayEntry(
-      builder: (context) => Positioned(
-        top: MediaQuery.of(context).padding.top + 10,
-        left: 20,
-        right: 20,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFF323232),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10)],
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.warning_amber_rounded, color: AppTheme.mtnYellow, size: 28),
-                const SizedBox(width: 12),
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Vérifiez votre reçu',
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'En cas d\'erreur, intervenez vite. Délai d\'annulation limité.',
-                        style: TextStyle(color: Colors.white70, fontSize: 11),
-                      ),
-                    ],
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => entry.remove(),
-                  child: const Text('OK', style: TextStyle(color: AppTheme.mtnYellow, fontWeight: FontWeight.bold)),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
-    overlay.insert(entry);
-    
-    // Auto remove after 8 seconds
-    Future.delayed(const Duration(seconds: 8), () {
-      if (entry.mounted) entry.remove();
-    });
   }
 }

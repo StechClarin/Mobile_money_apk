@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/constants.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_theme.dart';
+import '../../../../core/design_system/app_colors.dart';
 import '../providers/payment_controller.dart';
 import '../providers/payment_state.dart';
 
@@ -69,9 +69,11 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     _updateControllersIfNecessary(state);
 
     return Scaffold(
+      backgroundColor: AppColors.spotifyBlack,
       appBar: AppBar(
-        title: const Text('Send Money'),
-        backgroundColor: AppTheme.mtnYellow,
+        title: const Text('Transférer de l\'argent', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+        backgroundColor: AppColors.spotifyBlack,
+        foregroundColor: Colors.white,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -79,46 +81,47 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Recipient Info Card
+            // Recipient Info Card (Spotify Dark)
             if (widget.recipientName != null || widget.recipientNumber != null)
               Container(
                 margin: const EdgeInsets.only(bottom: AppSpacing.lg),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.spotifyCard,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppTheme.mtnYellow.withValues(alpha: 0.3)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                    ),
-                  ],
+                  border: Border.all(color: const Color(0xFF282828), width: 0.8),
                 ),
                 child: Row(
                   children: [
-                    CircleAvatar(
-                      backgroundColor: AppTheme.mtnYellow.withValues(alpha: 0.1),
-                      child: const Icon(Icons.person, color: AppTheme.black),
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF26193E),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: const Color(0xFF382A54)),
+                      ),
+                      child: const Icon(Icons.person_rounded, color: AppColors.monarchPurpleNeon, size: 24),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 14),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             widget.recipientName ?? 'Destinataire inconnu',
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),
                           ),
+                          const SizedBox(height: 2),
                           Text(
                             widget.recipientNumber ?? '',
-                            style: TextStyle(color: Colors.grey.shade600),
+                            style: const TextStyle(color: AppColors.spotifyGrey, fontSize: 13),
                           ),
                         ],
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.edit, size: 20),
+                      icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.spotifyGrey),
                       onPressed: () => context.pop(),
                     ),
                   ],
@@ -128,7 +131,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
             // Sender Input (Total)
             _buildAmountInput(
               controller: _sentController,
-              label: 'Montant débité (frais inclus)',
+              label: 'Montant à débiter (frais inclus)',
               onChanged: _onSentChanged,
               isError: !state.isAmountValid,
             ),
@@ -138,7 +141,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
             // Receiver Input (Net)
             _buildAmountInput(
               controller: _receivedController,
-              label: 'Le destinataire reçoit',
+              label: 'Le destinataire recevra net',
               onChanged: _onReceivedChanged,
               isError: false, 
             ),
@@ -148,18 +151,19 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
             // Fee Info
             if (state.fees > 0)
               Container(
-                padding: const EdgeInsets.all(AppSpacing.sm),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
-                  color: Colors.blue.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
+                  color: const Color(0xFF26193E),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFF382A54)),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.info_outline, size: 16, color: Colors.blue),
+                    const Icon(Icons.info_outline_rounded, size: 16, color: AppColors.monarchPurpleNeon),
                     const SizedBox(width: 8),
                     Text(
-                      'Frais appliqués : ${_formatCurrency(state.fees)} FCFA',
-                      style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
+                      'Frais de transfert : ${_formatCurrency(state.fees)} FCFA (1%)',
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 12),
                     ),
                   ],
                 ),
@@ -170,7 +174,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
               const SizedBox(height: AppSpacing.sm),
               Text(
                 state.errorMessage!,
-                style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style: const TextStyle(color: Color(0xFFEF4444), fontWeight: FontWeight.bold, fontSize: 13),
               ),
             ],
 
@@ -192,15 +196,17 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                     }
                   : null, 
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.mtnYellow,
-                foregroundColor: AppTheme.black,
+                backgroundColor: AppColors.monarchPurpleNeon,
+                foregroundColor: Colors.white,
+                disabledBackgroundColor: AppColors.spotifyHover,
+                disabledForegroundColor: AppColors.spotifySubtle,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(14),
                 ),
-                elevation: (state.amountSent > 0 && state.isAmountValid) ? 4 : 0,
+                elevation: 0,
               ),
-              child: const Text('Envoyer', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              child: const Text('Confirmer le transfert', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
           ],
         ),
@@ -217,23 +223,16 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: AppColors.spotifyGrey)),
         const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            color: AppColors.spotifyCard,
+            borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: isError ? Colors.red : Colors.grey.shade300,
-              width: isError ? 2 : 1,
+              color: isError ? const Color(0xFFEF4444) : const Color(0xFF282828),
+              width: isError ? 1.5 : 0.8,
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
           ),
           child: TextField(
             controller: controller,
@@ -243,18 +242,22 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                FilteringTextInputFormatter.digitsOnly,
                _CurrencyInputFormatter(),
             ],
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
             decoration: const InputDecoration(
               border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               suffixText: 'FCFA',
-              suffixStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+              suffixStyle: TextStyle(fontWeight: FontWeight.bold, color: AppColors.spotifyGrey, fontSize: 15),
             ),
           ),
         ),
       ],
     );
   }
+
+
   
   void _updateControllersIfNecessary(PaymentState state) {
     String format(double val) {

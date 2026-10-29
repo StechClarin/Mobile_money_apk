@@ -13,8 +13,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Mobile Money',
-      theme: AppTheme.lightTheme,
+      title: 'Walliss',
+      theme: AppTheme.darkTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.dark,
       routerConfig: routerConfig,
       debugShowCheckedModeBanner: false,
     );

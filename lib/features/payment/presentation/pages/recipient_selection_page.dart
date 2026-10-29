@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../../../core/constants.dart';
+import '../../../../core/design_system/app_colors.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class RecipientSelectionPage extends StatefulWidget {
   const RecipientSelectionPage({super.key});
@@ -18,6 +18,7 @@ class _RecipientSelectionPageState extends State<RecipientSelectionPage> {
     {'name': 'Maman', 'number': '677 11 22 33'},
     {'name': 'Papa', 'number': '678 44 55 66'},
     {'name': 'Jean Luc', 'number': '699 77 88 99'},
+    {'name': 'Marie C.', 'number': '677 88 99 00'},
   ];
 
   final List<Map<String, String>> _allContacts = [
@@ -26,59 +27,82 @@ class _RecipientSelectionPageState extends State<RecipientSelectionPage> {
     {'name': 'Charlie Design', 'number': '690 98 76 54'},
     {'name': 'David Dev', 'number': '650 11 22 33'},
     {'name': 'Emma Art', 'number': '655 44 33 22'},
+    {'name': 'Samuel Eto\'o', 'number': '671 22 33 44'},
   ];
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.spotifyBlack,
       appBar: AppBar(
-        title: const Text('Envoyer de l\'argent'),
-        backgroundColor: AppTheme.mtnYellow,
-        foregroundColor: AppTheme.black,
+        title: const Text(
+          'Envoyer de l\'argent',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        backgroundColor: AppColors.spotifyBlack,
+        foregroundColor: Colors.white,
         elevation: 0,
       ),
       body: Column(
         children: [
-          // Search box
-          Container(
-            padding: const EdgeInsets.all(AppSpacing.lg),
-            color: AppTheme.mtnYellow,
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Saisir un numéro ou un nom',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.person_add_alt_1),
-                  onPressed: () {},
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
+          // Search box Spotify Dark
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.spotifyCard,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFF282828), width: 0.8),
               ),
-              onSubmitted: (value) {
-                if (value.isNotEmpty) {
-                  _navigateToPayment(value, 'Nouveau Destinataire');
-                }
-              },
+              child: TextField(
+                controller: _searchController,
+                style: const TextStyle(color: Colors.white, fontSize: 15),
+                decoration: InputDecoration(
+                  hintText: 'Saisir un numéro (+237...) ou un nom',
+                  hintStyle: const TextStyle(color: AppColors.spotifyGrey, fontSize: 14),
+                  prefixIcon: const Icon(Icons.search_rounded, color: AppColors.monarchPurpleNeon, size: 22),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.person_add_alt_1_rounded, color: AppColors.monarchPurpleNeon),
+                    onPressed: () {},
+                  ),
+                  filled: false,
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+                onSubmitted: (value) {
+                  if (value.isNotEmpty) {
+                    _navigateToPayment(value, 'Nouveau Destinataire');
+                  }
+                },
+              ),
             ),
           ),
 
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.all(AppSpacing.lg),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 12),
               children: [
-                // Recent / Frequent
+                // Recent / Frequent Contacts
                 const Text(
                   'Fréquents',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    letterSpacing: 0.3,
+                  ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
                 SizedBox(
-                  height: 100,
+                  height: 105,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: _frequentContacts.length,
@@ -87,22 +111,33 @@ class _RecipientSelectionPageState extends State<RecipientSelectionPage> {
                       return GestureDetector(
                         onTap: () => _navigateToPayment(contact['number']!, contact['name']!),
                         child: Container(
-                          width: 80,
-                          margin: const EdgeInsets.only(right: 16),
+                          width: 82,
+                          margin: const EdgeInsets.only(right: 14),
                           child: Column(
                             children: [
-                              CircleAvatar(
-                                radius: 28,
-                                backgroundColor: AppTheme.mtnYellow.withValues(alpha: 0.2),
-                                child: Text(
-                                  contact['name']![0],
-                                  style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.black),
+                              Container(
+                                width: 56,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF26193E),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: const Color(0xFF382A54), width: 1),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    contact['name']![0],
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.monarchPurpleNeon,
+                                      fontSize: 18,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: 8),
                               Text(
                                 contact['name']!,
-                                style: const TextStyle(fontSize: 12),
+                                style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
                                 textAlign: TextAlign.center,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -120,22 +155,50 @@ class _RecipientSelectionPageState extends State<RecipientSelectionPage> {
                 // All contacts
                 const Text(
                   'Tous les contacts',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    letterSpacing: 0.3,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 ..._allContacts.map((contact) {
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.grey.shade200,
-                      child: Text(
-                        contact['name']![0],
-                        style: const TextStyle(color: Colors.grey),
-                      ),
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    decoration: BoxDecoration(
+                      color: AppColors.spotifyCard,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: const Color(0xFF242424), width: 0.8),
                     ),
-                    title: Text(contact['name']!, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text(contact['number']!),
-                    onTap: () => _navigateToPayment(contact['number']!, contact['name']!),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      leading: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: AppColors.spotifyElevated,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: const Color(0xFF2E2E2E)),
+                        ),
+                        child: Center(
+                          child: Text(
+                            contact['name']![0],
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      title: Text(
+                        contact['name']!,
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 14),
+                      ),
+                      subtitle: Text(
+                        contact['number']!,
+                        style: const TextStyle(color: AppColors.spotifyGrey, fontSize: 12),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.spotifyGrey, size: 14),
+                      onTap: () => _navigateToPayment(contact['number']!, contact['name']!),
+                    ),
                   );
                 }),
               ],
