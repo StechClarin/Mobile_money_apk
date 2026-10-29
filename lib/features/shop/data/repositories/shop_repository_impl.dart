@@ -10,57 +10,57 @@ class ShopRepositoryImpl implements ShopRepository {
     final mockProducts = [
       const Product(
         id: '1',
-        name: 'MTN Smart T',
-        description: 'Le smartphone 3G abordable avec WhatsApp intégré.',
-        price: 15500,
+        name: 'Terminal Walliss POS Pro',
+        description: 'Terminal tactile avec imprimante thermique pour marchands.',
+        price: 85000,
+        imageUrl: 'https://placeholder.com/150',
+        category: 'Terminaux',
+        icon: 'point_of_sale',
+      ),
+      const Product(
+        id: '2',
+        name: 'Smart T Walliss 4G',
+        description: 'Smartphone professionnel sécurisé avec application Walliss pré-installée.',
+        price: 25000,
         imageUrl: 'https://placeholder.com/150',
         category: 'Telephones',
         icon: 'phone_android',
       ),
       const Product(
-        id: '2',
-        name: 'Flybox 4G MTN',
-        description: 'Internet à la maison pour toute la famille.',
-        price: 25000,
-        imageUrl: 'https://placeholder.com/150',
-        category: 'Flybox',
-        icon: 'wifi',
-      ),
-      const Product(
         id: '3',
-        name: 'Routeur Fixe 4G',
-        description: 'Connexion haut débit stable pour bureau.',
-        price: 35000,
+        name: 'Lecteur QR & Carte NFC',
+        description: 'Boîtier d\'encaissement ultra-rapide pour points de vente.',
+        price: 18000,
         imageUrl: 'https://placeholder.com/150',
-        category: 'Routers',
-        icon: 'router',
+        category: 'Terminaux',
+        icon: 'nfc',
       ),
       const Product(
         id: '4',
-        name: 'TV Box MTN',
-        description: 'Accédez à toutes vos chaînes préférées en HD.',
-        price: 45000,
+        name: 'Walliss Box WiFi 5G',
+        description: 'Routeur haut débit autonome pour commerces et domiciles.',
+        price: 35000,
         imageUrl: 'https://placeholder.com/150',
-        category: 'TV',
-        icon: 'tv',
+        category: 'Routers',
+        icon: 'wifi',
       ),
       const Product(
         id: '5',
-        name: 'Modem USB 4G',
-        description: 'Vivez la mobilité avec internet partout.',
-        price: 10000,
-        imageUrl: 'https://placeholder.com/150',
-        category: 'Modems',
-        icon: 'usb',
-      ),
-       const Product(
-        id: '6',
-        name: 'iPhone 15 Pro MTN',
-        description: 'L\'expérience ultime avec le réseau MTN 4G+.',
-        price: 850000,
+        name: 'iPhone 15 Pro Max',
+        description: 'L\'expérience ultime pour piloter votre entreprise Walliss.',
+        price: 890000,
         imageUrl: 'https://placeholder.com/150',
         category: 'Telephones',
         icon: 'smartphone',
+      ),
+      const Product(
+        id: '6',
+        name: 'Badge Paiement Walliss NFC',
+        description: 'Porte-clé sécurisé pour payer d\'un simple geste.',
+        price: 5000,
+        imageUrl: 'https://placeholder.com/150',
+        category: 'Accessoires',
+        icon: 'contactless',
       ),
     ];
     return Right(mockProducts);
@@ -77,6 +77,6 @@ class ShopRepositoryImpl implements ShopRepository {
 
   @override
   Future<Either<Failure, List<String>>> getCategories() async {
-    return const Right(['All', 'Telephones', 'Routers', 'Flybox', 'TV', 'Modems']);
+    return const Right(['All', 'Terminaux', 'Telephones', 'Routers', 'Accessoires']);
   }
 }

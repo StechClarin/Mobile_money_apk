@@ -5,7 +5,6 @@ import 'package:mobilemoney/features/shop/presentation/manager/shop_providers.da
 import 'package:mobilemoney/features/shop/presentation/widgets/category_tabs.dart';
 import 'package:mobilemoney/features/shop/presentation/widgets/product_card.dart';
 import 'package:mobilemoney/features/shop/presentation/widgets/shop_search_bar.dart';
-import 'package:mobilemoney/core/design_system/app_text_styles.dart';
 import 'package:mobilemoney/core/design_system/app_colors.dart';
 import 'package:mobilemoney/core/constants.dart';
 import '../../widgets/promo_carousel.dart';
@@ -27,15 +26,15 @@ class BoutiqueTab extends ConsumerWidget {
         key: const PageStorageKey('BoutiqueTab'),
         slivers: [
           SliverAppBar(
-            backgroundColor: AppColors.primary,
+            backgroundColor: AppColors.spotifyBlack,
             leading: IconButton(
-              icon: const Icon(Icons.menu, color: AppColors.secondary),
+              icon: const Icon(Icons.menu_rounded, color: AppColors.monarchPurpleNeon),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
             title: const Text(
-              '677 00 00 00',
+              'Boutique Walliss',
               style: TextStyle(
-                color: AppColors.secondary,
+                color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -50,10 +49,10 @@ class BoutiqueTab extends ConsumerWidget {
                 child: Badge(
                   label: Text('$cartItemsCount'),
                   isLabelVisible: cartItemsCount > 0,
-                  backgroundColor: Colors.white,
-                  textColor: AppColors.primary,
+                  backgroundColor: AppColors.monarchPurpleNeon,
+                  textColor: Colors.white,
                   child: IconButton(
-                    icon: const Icon(Icons.shopping_cart_outlined, color: AppColors.secondary),
+                    icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
                     onPressed: () => context.push(AppRoutes.cart),
                   ),
                 ),
@@ -62,26 +61,31 @@ class BoutiqueTab extends ConsumerWidget {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Exclusive pour vous',
-                    style: AppTextStyles.h1,
+                  const Text(
+                    'Boutique Officielle',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.3,
+                    ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Trouvez les meilleures offres et services MTN.',
-                    style: AppTextStyles.bodyMedium.copyWith(color: AppColors.grey),
+                  const SizedBox(height: 6),
+                  const Text(
+                    'Équipements, terminaux et accessoires certifiés Walliss.',
+                    style: TextStyle(color: AppColors.spotifyGrey, fontSize: 13),
                   ),
                   const SizedBox(height: 16),
                   const ShopSearchBar(),
                   const SizedBox(height: 16),
                   const PromoCarousel(
                     banners: [
-                      PromoBanner(id: 's1', imageUrl: 'url_shop_1', title: 'Soldes d\'Été -50%'),
-                      PromoBanner(id: 's2', imageUrl: 'url_shop_2', title: 'Nouveaux Smartphones Dispo'),
+                      PromoBanner(id: 's1', imageUrl: 'url_shop_1', title: 'Pack Terminal Walliss POS -30%'),
+                      PromoBanner(id: 's2', imageUrl: 'url_shop_2', title: 'Smartphones & Terminaux Pro'),
                     ],
                   ),
                 ],

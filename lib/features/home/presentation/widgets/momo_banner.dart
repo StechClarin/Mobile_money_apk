@@ -63,19 +63,20 @@ class _MomoBannerState extends State<MomoBanner> with SingleTickerProviderStateM
                   // Image Placeholder / Background
                   Container(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          AppColors.primary,
-                          AppColors.primary.withValues(alpha: 0.7),
+                          Color(0xFF321A4E), // Deep Sung Jin-woo purple
+                          AppColors.spotifyCard, // Spotify dark
                         ],
                       ),
+                      border: Border.all(color: const Color(0xFF382A54), width: 0.8),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Opacity(
-                        opacity: 0.1,
-                        child: Icon(Icons.star, size: 100, color: Colors.white),
+                        opacity: 0.08,
+                        child: const Icon(Icons.flash_on_rounded, size: 100, color: Colors.white),
                       ),
                     ),
                   ),
@@ -88,9 +89,9 @@ class _MomoBannerState extends State<MomoBanner> with SingleTickerProviderStateM
                         colors: [
                           Colors.transparent,
                           Colors.black.withValues(alpha: 0.4),
-                          Colors.black.withValues(alpha: 0.8),
+                          Colors.black.withValues(alpha: 0.85),
                         ],
-                        stops: const [0.4, 0.7, 1.0],
+                        stops: const [0.3, 0.65, 1.0],
                       ),
                     ),
                   ),
@@ -104,14 +105,14 @@ class _MomoBannerState extends State<MomoBanner> with SingleTickerProviderStateM
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(8),
+                            color: AppColors.monarchPurpleNeon,
+                            borderRadius: BorderRadius.circular(6),
                           ),
                           child: const Text(
-                            'OFFRE',
+                            'WALLISS EXCLUSIF',
                             style: TextStyle(
-                              color: AppColors.black,
-                              fontSize: 10,
+                              color: Colors.white,
+                              fontSize: 9,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 1,
                             ),

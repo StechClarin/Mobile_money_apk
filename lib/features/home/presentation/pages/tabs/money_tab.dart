@@ -89,9 +89,24 @@ class _MoneyTabState extends State<MoneyTab> with AutomaticKeepAliveClientMixin 
         SliverToBoxAdapter(
           child: PromoCarousel(
             banners: const [
-              PromoBanner(id: '1', imageUrl: 'url1', redirectLink: '/bundles'),
-              PromoBanner(id: '2', imageUrl: 'url2', redirectLink: '/transactions'),
-              PromoBanner(id: '3', imageUrl: 'url3'),
+              PromoBanner(
+                id: '1',
+                imageUrl: 'url1',
+                title: '0% de frais sur vos 3 premiers transferts',
+                redirectLink: '/recipient-selection',
+              ),
+              PromoBanner(
+                id: '2',
+                imageUrl: 'url2',
+                title: 'Boutique Walliss : -20% sur les équipements',
+                redirectLink: '/shop',
+              ),
+              PromoBanner(
+                id: '3',
+                imageUrl: 'url3',
+                title: 'Payez en 1 clic chez vos marchands favoris',
+                redirectLink: '/payment',
+              ),
             ],
           ),
         ),

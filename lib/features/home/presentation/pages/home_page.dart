@@ -4,8 +4,8 @@ import '../../../../core/constants.dart';
 import '../../../../core/design_system/app_colors.dart';
 import '../../../../core/design_system/walliss_bottom_nav_bar.dart';
 import 'tabs/money_tab.dart';
-import 'tabs/ma_ligne_tab.dart';
 import 'tabs/boutique_tab.dart';
+import '../../../transactions/presentation/pages/transactions_page.dart';
 import '../../../account/presentation/pages/account_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,13 +16,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0; // Default to Balance (0: Balance, 1: Market, 2: Exchange, 3: Setting)
+  int _currentIndex = 0; // 0: Balance (Money), 1: Market (Shop), 2: Exchange (Transactions), 3: Setting (Account)
 
   final List<Widget> _pages = [
-    const MoneyTab(),      // 0: Balance
-    const BoutiqueTab(),   // 1: Market
-    const MaLigneTab(),    // 2: Exchange
-    const AccountPage(),   // 3: Setting
+    const MoneyTab(),          // 0: Balance (Portefeuille & Envois)
+    const BoutiqueTab(),       // 1: Market (Boutique Walliss)
+    const TransactionsPage(),  // 2: Exchange (Transactions & Historique)
+    const AccountPage(),       // 3: Setting (Profil & Paramètres)
   ];
 
   @override
@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: AppColors.darkScaffold,
       drawer: Drawer(
-        backgroundColor: AppColors.darkCard,
+        backgroundColor: AppColors.spotifyCard,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -43,40 +43,49 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundColor: AppColors.darkCard,
-                    child: const Icon(Icons.person, color: AppColors.monarchPurpleNeon, size: 40),
+                    backgroundColor: AppColors.spotifyBlack,
+                    child: const Icon(Icons.account_balance_wallet_rounded, color: AppColors.monarchPurpleNeon, size: 36),
                   ),
                   const SizedBox(height: 10),
                   const Text(
-                    'Walliss User',
+                    'Walliss Pay & Shop',
                     style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(
-                    '+237 677 00 00 00',
-                    style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13),
+                    'Portefeuille numérique +237 677 00 00 00',
+                    style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 12),
                   ),
                 ],
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.history, color: AppColors.monarchPurpleNeon),
-              title: const Text('Historique', style: TextStyle(color: AppColors.textLight)),
+              leading: const Icon(Icons.swap_horiz_rounded, color: AppColors.monarchPurpleNeon),
+              title: const Text('Transactions d\'argent', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
               onTap: () {
                 Navigator.pop(context);
-                context.push(AppRoutes.transactions);
+                setState(() => _currentIndex = 2);
               },
             ),
             ListTile(
-              leading: const Icon(Icons.credit_card, color: AppColors.monarchPurpleNeon),
-              title: const Text('Cartes Walliss', style: TextStyle(color: AppColors.textLight)),
+              leading: const Icon(Icons.shopping_bag_outlined, color: AppColors.monarchPurpleNeon),
+              title: const Text('Boutique Walliss', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() => _currentIndex = 1);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.credit_card_rounded, color: AppColors.monarchPurpleNeon),
+              title: const Text('Cartes virtuelles', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
               onTap: () {
                 Navigator.pop(context);
                 context.push(AppRoutes.cards);
               },
             ),
+            const Divider(color: Color(0xFF282828)),
             ListTile(
-              leading: const Icon(Icons.settings, color: AppColors.monarchPurpleNeon),
-              title: const Text('Paramètres', style: TextStyle(color: AppColors.textLight)),
+              leading: const Icon(Icons.settings_outlined, color: AppColors.spotifyGrey),
+              title: const Text('Paramètres & Sécurité', style: TextStyle(color: AppColors.spotifyGrey)),
               onTap: () {
                 Navigator.pop(context);
                 setState(() => _currentIndex = 3);

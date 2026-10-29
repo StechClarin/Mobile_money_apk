@@ -97,13 +97,16 @@ class ServicesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mock Data for Services
+    // Mock Data for Pure Money Transactions & Shop Services
     final services = [
-      {'title': 'Envoi Argent', 'icon': Icons.send, 'color': Colors.blue, 'route': AppRoutes.recipientSelection},
-      {'title': 'Pass & Crédit', 'icon': Icons.phone_android, 'color': Colors.orange, 'route': '/bundles'},
-      {'title': 'Factures', 'icon': Icons.receipt_long, 'color': Colors.red, 'route': '/transactions'},
-      {'title': 'Banque', 'icon': Icons.account_balance, 'color': Colors.green, 'route': '/transactions'},
-      {'title': 'Cartes MoMo', 'icon': Icons.credit_card, 'color': Colors.purple, 'route': '/cards'},
+      {'title': 'Envoi Argent', 'icon': Icons.send_rounded, 'color': AppColors.monarchPurpleNeon, 'route': AppRoutes.recipientSelection},
+      {'title': 'Boutique', 'icon': Icons.shopping_bag_outlined, 'color': Colors.orangeAccent, 'route': AppRoutes.shop},
+      {'title': 'Scan QR', 'icon': Icons.qr_code_scanner_rounded, 'color': const Color(0xFF1DB954), 'route': AppRoutes.payment},
+      {'title': 'Cartes', 'icon': Icons.credit_card_rounded, 'color': Colors.purpleAccent, 'route': AppRoutes.cards},
+      {'title': 'Dépôt', 'icon': Icons.add_circle_outline_rounded, 'color': Colors.lightBlueAccent, 'route': AppRoutes.payment},
+      {'title': 'Retrait', 'icon': Icons.arrow_circle_down_rounded, 'color': Colors.tealAccent, 'route': AppRoutes.payment},
+      {'title': 'Paiement', 'icon': Icons.storefront_outlined, 'color': Colors.amberAccent, 'route': AppRoutes.shop},
+      {'title': 'Historique', 'icon': Icons.receipt_long_rounded, 'color': AppColors.spotifyGrey, 'route': AppRoutes.transactions},
     ];
 
     return GridView.builder(
