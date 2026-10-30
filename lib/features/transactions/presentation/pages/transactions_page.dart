@@ -227,11 +227,13 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     separatorBuilder: (context, index) => const SizedBox(height: 10),
                     itemBuilder: (context, index) {
                       final item = _filteredTransactions[index];
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.spotifyCard,
+                      return Material(
+                        color: AppColors.spotifyCard,
+                        borderRadius: BorderRadius.circular(16),
+                        clipBehavior: Clip.antiAlias,
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: const Color(0xFF242424), width: 0.8),
+                          side: const BorderSide(color: Color(0xFF242424), width: 0.8),
                         ),
                         child: ListTile(
                           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),

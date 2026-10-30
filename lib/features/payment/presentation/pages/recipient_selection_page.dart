@@ -164,15 +164,18 @@ class _RecipientSelectionPageState extends State<RecipientSelectionPage> {
                 ),
                 const SizedBox(height: 12),
                 ..._allContacts.map((contact) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    decoration: BoxDecoration(
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Material(
                       color: AppColors.spotifyCard,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: const Color(0xFF242424), width: 0.8),
-                    ),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        side: const BorderSide(color: Color(0xFF242424), width: 0.8),
+                      ),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                       leading: Container(
                         width: 44,
                         height: 44,
@@ -199,8 +202,10 @@ class _RecipientSelectionPageState extends State<RecipientSelectionPage> {
                       trailing: const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.spotifyGrey, size: 14),
                       onTap: () => _navigateToPayment(contact['number']!, contact['name']!),
                     ),
-                  );
-                }),
+                  ),
+                );
+              }),
+
               ],
             ),
           ),
