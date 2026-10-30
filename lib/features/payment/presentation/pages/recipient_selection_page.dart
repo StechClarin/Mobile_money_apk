@@ -168,7 +168,6 @@ class _RecipientSelectionPageState extends State<RecipientSelectionPage> {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Material(
                       color: AppColors.spotifyCard,
-                      borderRadius: BorderRadius.circular(16),
                       clipBehavior: Clip.antiAlias,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),

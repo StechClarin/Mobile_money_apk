@@ -229,7 +229,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       final item = _filteredTransactions[index];
                       return Material(
                         color: AppColors.spotifyCard,
-                        borderRadius: BorderRadius.circular(16),
                         clipBehavior: Clip.antiAlias,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
