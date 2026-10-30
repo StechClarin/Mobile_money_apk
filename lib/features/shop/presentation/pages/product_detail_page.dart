@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobilemoney/core/constants.dart';
 import 'package:mobilemoney/core/design_system/app_colors.dart';
 import 'package:mobilemoney/features/shop/domain/entities/product.dart';
+import 'package:mobilemoney/features/shop/domain/entities/product_variant.dart';
 import 'package:mobilemoney/features/shop/presentation/manager/shop_providers.dart';
 import 'package:mobilemoney/features/shop/presentation/utils/icon_mapper.dart';
 
@@ -24,6 +25,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
   int _quantity = 1;
   late final PageController _imagePageController;
   int _currentImageIndex = 0;
+  late ProductVariant _selectedVariant;
 
   final List<Map<String, dynamic>> _defaultAngles = [
     {'title': 'Vue Principale', 'iconSuffix': Icons.view_in_ar_rounded},
@@ -36,6 +38,15 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
   void initState() {
     super.initState();
     _imagePageController = PageController();
+    _selectedVariant = widget.product.allVariants.first;
+  }
+
+  @override
+  void didUpdateWidget(covariant ProductDetailPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.product.id != widget.product.id) {
+      _selectedVariant = widget.product.allVariants.first;
+    }
   }
 
   @override
@@ -47,6 +58,12 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
+    final variants = product.allVariants;
+    final currentPrice = _selectedVariant.price;
+    final currentOriginalPrice = _selectedVariant.originalPrice ?? product.originalPrice;
+    final currentDiscount = _selectedVariant.discountPercentage ?? product.discountPercentage;
+    final currentStock = _selectedVariant.stock;
+
     final isFavorite = ref.watch(wishlistProvider).contains(product.id);
     final cartCount = ref.watch(cartProvider).length;
     final allProductsAsync = ref.watch(productsProvider);
@@ -372,7 +389,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          '${product.stock} en stock',
+                          '$currentStock en stock',
                           style: GoogleFonts.plusJakartaSans(
                             color: Colors.greenAccent,
                             fontSize: 11,
@@ -445,6 +462,180 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
 
                   const SizedBox(height: 20),
 
+                  // Variantes / Options du Produit (Impactant le prix)
+                  if (variants.isNotEmpty) ...[
+                    Row(
+                      children: [
+                        const Icon(Icons.tune_rounded, size: 16, color: AppColors.monarchPurpleNeon),
+                        const SizedBox(width: 8),
+                        Text(
+                          product.variantCategoryTitle,
+                          style: GoogleFonts.plusJakartaSans(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppColors.monarchPurple.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: AppColors.monarchPurpleNeon.withValues(alpha: 0.3)),
+                          ),
+                          child: Text(
+                            _selectedVariant.name,
+                            style: GoogleFonts.plusJakartaSans(
+                              color: AppColors.monarchPurpleNeon,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Column(
+                      children: variants.map((variant) {
+                        final isSelected = variant.id == _selectedVariant.id;
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _selectedVariant = variant;
+                                if (_quantity > variant.stock) {
+                                  _quantity = variant.stock > 0 ? variant.stock : 1;
+                                }
+                              });
+                            },
+                            borderRadius: BorderRadius.circular(14),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: isSelected ? AppColors.spotifyElevated : AppColors.spotifyCard,
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                  color: isSelected ? AppColors.monarchPurpleNeon : Colors.white.withValues(alpha: 0.08),
+                                  width: isSelected ? 1.8 : 1,
+                                ),
+                                boxShadow: isSelected
+                                    ? [
+                                        BoxShadow(
+                                          color: AppColors.monarchPurple.withValues(alpha: 0.25),
+                                          blurRadius: 12,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ]
+                                    : null,
+                              ),
+                              child: Row(
+                                children: [
+                                  // Radio / Check indicator
+                                  Container(
+                                    width: 22,
+                                    height: 22,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: isSelected ? AppColors.monarchPurpleNeon : Colors.transparent,
+                                      border: Border.all(
+                                        color: isSelected ? AppColors.monarchPurpleNeon : Colors.white38,
+                                        width: 1.5,
+                                      ),
+                                    ),
+                                    child: isSelected
+                                        ? const Icon(Icons.check, size: 14, color: Colors.white)
+                                        : null,
+                                  ),
+                                  const SizedBox(width: 12),
+
+                                  // Variant Details (Name & optional description)
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                variant.name,
+                                                style: GoogleFonts.plusJakartaSans(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                            if (variant.badge != null) ...[
+                                              const SizedBox(width: 8),
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                                decoration: BoxDecoration(
+                                                  gradient: AppColors.monarchGradient,
+                                                  borderRadius: BorderRadius.circular(6),
+                                                ),
+                                                child: Text(
+                                                  variant.badge!,
+                                                  style: GoogleFonts.plusJakartaSans(
+                                                    color: Colors.white,
+                                                    fontSize: 9,
+                                                    fontWeight: FontWeight.w800,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ],
+                                        ),
+                                        if (variant.description != null) ...[
+                                          const SizedBox(height: 3),
+                                          Text(
+                                            variant.description!,
+                                            style: GoogleFonts.plusJakartaSans(
+                                              color: isSelected ? Colors.white70 : AppColors.spotifyGrey,
+                                              fontSize: 11,
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+
+                                  // Variant Price tag
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        '${variant.price.toInt()} F',
+                                        style: GoogleFonts.plusJakartaSans(
+                                          color: isSelected ? AppColors.monarchPurpleNeon : Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                      if (variant.originalPrice != null)
+                                        Text(
+                                          '${variant.originalPrice!.toInt()} F',
+                                          style: GoogleFonts.plusJakartaSans(
+                                            color: AppColors.spotifyGrey,
+                                            fontSize: 10,
+                                            decoration: TextDecoration.lineThrough,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+
                   // Price Section
                   Container(
                     padding: const EdgeInsets.all(16),
@@ -460,19 +651,19 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${product.price.toInt()} FCFA',
+                              '${currentPrice.toInt()} FCFA',
                               style: GoogleFonts.plusJakartaSans(
                                 color: AppColors.monarchPurpleNeon,
                                 fontSize: 26,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
-                            if (product.originalPrice != null) ...[
+                            if (currentOriginalPrice != null) ...[
                               const SizedBox(height: 4),
                               Row(
                                 children: [
                                   Text(
-                                    '${product.originalPrice!.toInt()} FCFA',
+                                    '${currentOriginalPrice.toInt()} FCFA',
                                     style: GoogleFonts.plusJakartaSans(
                                       color: AppColors.spotifyGrey,
                                       fontSize: 14,
@@ -480,7 +671,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                                     ),
                                   ),
                                   const SizedBox(width: 8),
-                                  if (product.discountPercentage != null)
+                                  if (currentDiscount != null)
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                       decoration: BoxDecoration(
@@ -488,7 +679,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Text(
-                                        '-${product.discountPercentage}%',
+                                        '-$currentDiscount%',
                                         style: GoogleFonts.plusJakartaSans(
                                           color: const Color(0xFFEF4444),
                                           fontSize: 11,
@@ -539,7 +730,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                                 padding: EdgeInsets.zero,
                                 constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
                                 onPressed: () {
-                                  if (_quantity < product.stock) {
+                                  if (_quantity < currentStock) {
                                     setState(() => _quantity++);
                                   }
                                 },
@@ -759,13 +950,20 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                   height: 50,
                   child: OutlinedButton(
                     onPressed: () {
+                      final variantProduct = product.copyWith(
+                        id: '${product.id}_${_selectedVariant.id}',
+                        name: '${product.name} (${_selectedVariant.name})',
+                        price: currentPrice,
+                        originalPrice: currentOriginalPrice,
+                        stock: currentStock,
+                      );
                       for (int i = 0; i < _quantity; i++) {
-                        ref.read(cartProvider.notifier).addToCart(product);
+                        ref.read(cartProvider.notifier).addToCart(variantProduct);
                       }
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            '$_quantity x ${product.name} ajouté au panier',
+                            '$_quantity x ${variantProduct.name} ajouté au panier',
                             style: GoogleFonts.plusJakartaSans(color: Colors.white),
                           ),
                           backgroundColor: AppColors.spotifyElevated,
@@ -803,8 +1001,15 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
+                      final variantProduct = product.copyWith(
+                        id: '${product.id}_${_selectedVariant.id}',
+                        name: '${product.name} (${_selectedVariant.name})',
+                        price: currentPrice,
+                        originalPrice: currentOriginalPrice,
+                        stock: currentStock,
+                      );
                       for (int i = 0; i < _quantity; i++) {
-                        ref.read(cartProvider.notifier).addToCart(product);
+                        ref.read(cartProvider.notifier).addToCart(variantProduct);
                       }
                       context.push(AppRoutes.cart);
                     },
@@ -815,7 +1020,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     ),
                     child: Text(
-                      'Acheter (${(product.price * _quantity).toInt()} FCFA)',
+                      'Acheter (${(currentPrice * _quantity).toInt()} FCFA)',
                       style: GoogleFonts.plusJakartaSans(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,

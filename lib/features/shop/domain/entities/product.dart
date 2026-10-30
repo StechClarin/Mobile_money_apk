@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'product_variant.dart';
 
 @immutable
 class Product extends Equatable {
@@ -22,6 +23,8 @@ class Product extends Equatable {
   final String brand;
   final int stock;
   final double imageCardHeight;
+  final List<ProductVariant> variants;
+  final String variantCategoryTitle;
 
   const Product({
     required this.id,
@@ -43,9 +46,96 @@ class Product extends Equatable {
     this.brand = 'Walliss Pro',
     this.stock = 25,
     this.imageCardHeight = 135.0,
+    this.variants = const [],
+    this.variantCategoryTitle = 'Modèle & Options',
   });
 
   List<String> get allImages => images.isNotEmpty ? images : [imageUrl, '${imageUrl}_2', '${imageUrl}_3', '${imageUrl}_4'];
+
+  List<ProductVariant> get allVariants {
+    if (variants.isNotEmpty) return variants;
+
+    // Tailored variants by category influencing price
+    if (category == 'Smartphones' || category == 'Ordinateurs & Tablettes') {
+      return [
+        ProductVariant(
+          id: '${id}_v1',
+          name: '128 Go',
+          price: price,
+          originalPrice: originalPrice,
+          description: 'Version Standard rapide & équilibrée',
+        ),
+        ProductVariant(
+          id: '${id}_v2',
+          name: '256 Go Pro',
+          price: (price * 1.2).roundToDouble(),
+          originalPrice: originalPrice != null ? (originalPrice! * 1.2).roundToDouble() : null,
+          badge: 'Le Plus Choisi',
+          description: 'Idéal pour le multitâche et les applications pros',
+        ),
+        ProductVariant(
+          id: '${id}_v3',
+          name: '512 Go Ultra',
+          price: (price * 1.45).roundToDouble(),
+          originalPrice: originalPrice != null ? (originalPrice! * 1.45).roundToDouble() : null,
+          badge: 'Max Puissance',
+          description: 'Espace géant pour bases de données et médias 4K',
+        ),
+      ];
+    } else if (category == 'Terminaux POS') {
+      return [
+        ProductVariant(
+          id: '${id}_v1',
+          name: 'Terminal Seul',
+          price: price,
+          originalPrice: originalPrice,
+          description: 'Équipement prêt à l\'emploi avec carte SIM',
+        ),
+        ProductVariant(
+          id: '${id}_v2',
+          name: 'Pack Pro (+ 10 Rouleaux)',
+          price: price + 12000,
+          originalPrice: originalPrice != null ? originalPrice! + 15000 : null,
+          badge: 'Pack Commerçant',
+          description: 'Inclus papier thermique haute cadence 58mm',
+        ),
+        ProductVariant(
+          id: '${id}_v3',
+          name: 'Pack Caisse Intégrale',
+          price: price + 35000,
+          originalPrice: originalPrice != null ? originalPrice! + 45000 : null,
+          badge: 'Clé en main',
+          description: 'Support de table rotatif + lot de 20 rouleaux + sacoche',
+        ),
+      ];
+    } else {
+      return [
+        ProductVariant(
+          id: '${id}_v1',
+          name: 'Édition Solo',
+          price: price,
+          originalPrice: originalPrice,
+          description: '1 unité standard certifiée Walliss',
+        ),
+        ProductVariant(
+          id: '${id}_v2',
+          name: 'Pack Duo (-15%)',
+          price: (price * 1.7).roundToDouble(),
+          originalPrice: (price * 2),
+          badge: 'Économie 15%',
+          description: 'Lot de 2 unités pour équiper plusieurs caisses',
+        ),
+        ProductVariant(
+          id: '${id}_v3',
+          name: 'Pack Équipe x5',
+          price: (price * 3.9).roundToDouble(),
+          originalPrice: (price * 5),
+          badge: 'Prix Grossiste',
+          description: 'Lot de 5 unités pour grands établissements',
+        ),
+      ];
+    }
+  }
 
   Product copyWith({
     String? id,
@@ -67,6 +157,8 @@ class Product extends Equatable {
     String? brand,
     int? stock,
     double? imageCardHeight,
+    List<ProductVariant>? variants,
+    String? variantCategoryTitle,
   }) {
     return Product(
       id: id ?? this.id,
@@ -88,6 +180,8 @@ class Product extends Equatable {
       brand: brand ?? this.brand,
       stock: stock ?? this.stock,
       imageCardHeight: imageCardHeight ?? this.imageCardHeight,
+      variants: variants ?? this.variants,
+      variantCategoryTitle: variantCategoryTitle ?? this.variantCategoryTitle,
     );
   }
 
@@ -112,7 +206,10 @@ class Product extends Equatable {
         brand,
         stock,
         imageCardHeight,
+        variants,
+        variantCategoryTitle,
       ];
 }
+
 
 
