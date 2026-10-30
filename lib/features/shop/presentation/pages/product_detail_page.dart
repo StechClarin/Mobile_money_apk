@@ -22,6 +22,27 @@ class ProductDetailPage extends ConsumerStatefulWidget {
 
 class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
   int _quantity = 1;
+  late final PageController _imagePageController;
+  int _currentImageIndex = 0;
+
+  final List<Map<String, dynamic>> _defaultAngles = [
+    {'title': 'Vue Principale', 'iconSuffix': Icons.view_in_ar_rounded},
+    {'title': 'Angle 3D Profil', 'iconSuffix': Icons.threed_rotation_rounded},
+    {'title': 'Connectiques & Ports', 'iconSuffix': Icons.settings_input_composite_rounded},
+    {'title': 'Pack & Accessoires', 'iconSuffix': Icons.inventory_2_outlined},
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _imagePageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _imagePageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +50,15 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
     final isFavorite = ref.watch(wishlistProvider).contains(product.id);
     final cartCount = ref.watch(cartProvider).length;
     final allProductsAsync = ref.watch(productsProvider);
+    final galleryImages = product.allImages;
 
     return Scaffold(
       backgroundColor: AppColors.spotifyBlack,
       body: CustomScrollView(
         slivers: [
-          // 1. Sleek SliverAppBar with Hero Icon Preview
+          // 1. Sleek SliverAppBar with Swipeable Multi-Image Gallery
           SliverAppBar(
-            expandedHeight: 330,
+            expandedHeight: 380,
             pinned: true,
             backgroundColor: AppColors.spotifyBlack,
             elevation: 0,
@@ -44,8 +66,9 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
               icon: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.spotifyBlack.withValues(alpha: 0.7),
+                  color: AppColors.spotifyBlack.withValues(alpha: 0.75),
                   shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white12),
                 ),
                 child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
               ),
@@ -56,8 +79,9 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                 icon: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.spotifyBlack.withValues(alpha: 0.7),
+                    color: AppColors.spotifyBlack.withValues(alpha: 0.75),
                     shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white12),
                   ),
                   child: Icon(
                     isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
@@ -80,8 +104,9 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                     icon: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppColors.spotifyBlack.withValues(alpha: 0.7),
+                        color: AppColors.spotifyBlack.withValues(alpha: 0.75),
                         shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white12),
                       ),
                       child: const Icon(Icons.shopping_cart_outlined, color: Colors.white, size: 20),
                     ),
@@ -99,7 +124,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                     decoration: BoxDecoration(
                       gradient: RadialGradient(
                         center: const Alignment(0, -0.2),
-                        radius: 0.85,
+                        radius: 0.9,
                         colors: [
                           AppColors.monarchPurpleDeep.withValues(alpha: 0.35),
                           AppColors.spotifyCard,
@@ -108,46 +133,129 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                       ),
                     ),
                   ),
-                  // Centered Product Graphic
-                  Center(
-                    child: Hero(
-                      tag: 'product_icon_${product.id}',
-                      child: Container(
-                        width: 140,
-                        height: 140,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.spotifyElevated,
-                          border: Border.all(
-                            color: AppColors.monarchPurpleNeon.withValues(alpha: 0.3),
-                            width: 2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.monarchPurple.withValues(alpha: 0.3),
-                              blurRadius: 30,
-                              offset: const Offset(0, 8),
+
+                  // Horizontal Scrollable / Swipeable Images Gallery (PageView)
+                  Positioned.fill(
+                    bottom: 70,
+                    child: PageView.builder(
+                      controller: _imagePageController,
+                      itemCount: galleryImages.length,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentImageIndex = index;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        final angleInfo = _defaultAngles[index % _defaultAngles.length];
+                        final isFirst = index == 0;
+
+                        return Center(
+                          child: Hero(
+                            tag: isFirst ? 'product_icon_${product.id}' : 'product_icon_${product.id}_$index',
+                            child: Container(
+                              width: 170,
+                              height: 170,
+                              margin: const EdgeInsets.symmetric(horizontal: 20),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.spotifyElevated,
+                                border: Border.all(
+                                  color: AppColors.monarchPurpleNeon.withValues(alpha: 0.35),
+                                  width: 2,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors.monarchPurple.withValues(alpha: 0.35),
+                                    blurRadius: 32,
+                                    offset: const Offset(0, 10),
+                                  ),
+                                ],
+                              ),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Transform.rotate(
+                                    angle: index * 0.15,
+                                    child: Icon(
+                                      IconMapper.getIcon(product.icon),
+                                      size: 82,
+                                      color: AppColors.monarchPurpleNeon,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 12,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.spotifyBlack.withValues(alpha: 0.8),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(color: Colors.white12),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(angleInfo['iconSuffix'] as IconData, size: 11, color: AppColors.monarchCyan),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            angleInfo['title'] as String,
+                                            style: GoogleFonts.plusJakartaSans(
+                                              color: Colors.white70,
+                                              fontSize: 9,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                        child: Icon(
-                          IconMapper.getIcon(product.icon),
-                          size: 72,
-                          color: AppColors.monarchPurpleNeon,
-                        ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  // Floating Image Counter Badge (Top-Right under actions)
+                  Positioned(
+                    top: 90,
+                    right: 20,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: AppColors.spotifyBlack.withValues(alpha: 0.8),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: Colors.white12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.photo_library_outlined, size: 12, color: AppColors.monarchPurpleNeon),
+                          const SizedBox(width: 5),
+                          Text(
+                            '${_currentImageIndex + 1} / ${galleryImages.length}',
+                            style: GoogleFonts.plusJakartaSans(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  // Tag Badge if present
+
+                  // Tag Badge if present (Bottom-Left)
                   if (product.tag != null)
                     Positioned(
-                      bottom: 20,
+                      top: 90,
                       left: 20,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
                           gradient: AppColors.monarchGradient,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(8),
                           boxShadow: [
                             BoxShadow(
                               color: AppColors.monarchPurple.withValues(alpha: 0.4),
@@ -159,17 +267,83 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                           product.tag!,
                           style: GoogleFonts.plusJakartaSans(
                             color: Colors.white,
-                            fontSize: 11,
+                            fontSize: 10,
                             fontWeight: FontWeight.w800,
-                            letterSpacing: 0.8,
+                            letterSpacing: 0.6,
                           ),
                         ),
                       ),
                     ),
+
+                  // Bottom Thumbnails Scrollable Bar & Dots
+                  Positioned(
+                    bottom: 12,
+                    left: 0,
+                    right: 0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Horizontal thumbnails strip
+                        SizedBox(
+                          height: 48,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            itemCount: galleryImages.length,
+                            separatorBuilder: (context, index) => const SizedBox(width: 8),
+                            itemBuilder: (context, index) {
+                              final isSelected = index == _currentImageIndex;
+                              return GestureDetector(
+                                onTap: () {
+                                  _imagePageController.animateToPage(
+                                    index,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeInOut,
+                                  );
+                                },
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  width: 48,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.spotifyElevated,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: isSelected ? AppColors.monarchPurpleNeon : Colors.white12,
+                                      width: isSelected ? 2 : 1,
+                                    ),
+                                    boxShadow: isSelected
+                                        ? [
+                                            BoxShadow(
+                                              color: AppColors.monarchPurple.withValues(alpha: 0.4),
+                                              blurRadius: 8,
+                                            ),
+                                          ]
+                                        : null,
+                                  ),
+                                  child: Center(
+                                    child: Transform.rotate(
+                                      angle: index * 0.15,
+                                      child: Icon(
+                                        IconMapper.getIcon(product.icon),
+                                        size: 22,
+                                        color: isSelected ? AppColors.monarchPurpleNeon : Colors.white60,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
+
 
           // 2. Main Product Content
           SliverToBoxAdapter(

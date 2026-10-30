@@ -9,6 +9,7 @@ class Product extends Equatable {
   final double price;
   final double? originalPrice;
   final String imageUrl;
+  final List<String> images;
   final String category;
   final String icon;
   final bool isAvailable;
@@ -29,6 +30,7 @@ class Product extends Equatable {
     required this.price,
     this.originalPrice,
     required this.imageUrl,
+    this.images = const [],
     required this.category,
     required this.icon,
     this.isAvailable = true,
@@ -43,6 +45,8 @@ class Product extends Equatable {
     this.imageCardHeight = 135.0,
   });
 
+  List<String> get allImages => images.isNotEmpty ? images : [imageUrl, '${imageUrl}_2', '${imageUrl}_3', '${imageUrl}_4'];
+
   Product copyWith({
     String? id,
     String? name,
@@ -50,6 +54,7 @@ class Product extends Equatable {
     double? price,
     double? originalPrice,
     String? imageUrl,
+    List<String>? images,
     String? category,
     String? icon,
     bool? isAvailable,
@@ -70,6 +75,7 @@ class Product extends Equatable {
       price: price ?? this.price,
       originalPrice: originalPrice ?? this.originalPrice,
       imageUrl: imageUrl ?? this.imageUrl,
+      images: images ?? this.images,
       category: category ?? this.category,
       icon: icon ?? this.icon,
       isAvailable: isAvailable ?? this.isAvailable,
@@ -93,6 +99,7 @@ class Product extends Equatable {
         price,
         originalPrice,
         imageUrl,
+        images,
         category,
         icon,
         isAvailable,
@@ -107,4 +114,5 @@ class Product extends Equatable {
         imageCardHeight,
       ];
 }
+
 
