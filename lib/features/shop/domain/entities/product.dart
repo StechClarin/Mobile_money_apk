@@ -23,8 +23,8 @@ class Product extends Equatable {
   final String brand;
   final int stock;
   final double imageCardHeight;
-  final List<ProductVariant> variants;
-  final String variantCategoryTitle;
+  final List<ProductVariant>? variants;
+  final String? variantCategoryTitle;
 
   const Product({
     required this.id,
@@ -46,14 +46,17 @@ class Product extends Equatable {
     this.brand = 'Walliss Pro',
     this.stock = 25,
     this.imageCardHeight = 135.0,
-    this.variants = const [],
-    this.variantCategoryTitle = 'Modèle & Options',
+    this.variants,
+    this.variantCategoryTitle,
   });
+
+  String get effectiveVariantTitle => variantCategoryTitle ?? 'Modèle & Options';
 
   List<String> get allImages => images.isNotEmpty ? images : [imageUrl, '${imageUrl}_2', '${imageUrl}_3', '${imageUrl}_4'];
 
   List<ProductVariant> get allVariants {
-    if (variants.isNotEmpty) return variants;
+    final v = variants;
+    if (v != null && v.isNotEmpty) return v;
 
     // Tailored variants by category influencing price
     if (category == 'Smartphones' || category == 'Ordinateurs & Tablettes') {

@@ -38,14 +38,30 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
   void initState() {
     super.initState();
     _imagePageController = PageController();
-    _selectedVariant = widget.product.allVariants.first;
+    final variants = widget.product.allVariants;
+    _selectedVariant = variants.isNotEmpty
+        ? variants.first
+        : ProductVariant(
+            id: '${widget.product.id}_def',
+            name: 'Standard',
+            price: widget.product.price,
+            originalPrice: widget.product.originalPrice,
+          );
   }
 
   @override
   void didUpdateWidget(covariant ProductDetailPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.product.id != widget.product.id) {
-      _selectedVariant = widget.product.allVariants.first;
+      final variants = widget.product.allVariants;
+      _selectedVariant = variants.isNotEmpty
+          ? variants.first
+          : ProductVariant(
+              id: '${widget.product.id}_def',
+              name: 'Standard',
+              price: widget.product.price,
+              originalPrice: widget.product.originalPrice,
+            );
     }
   }
 
@@ -469,7 +485,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                         const Icon(Icons.tune_rounded, size: 16, color: AppColors.monarchPurpleNeon),
                         const SizedBox(width: 8),
                         Text(
-                          product.variantCategoryTitle,
+                          product.effectiveVariantTitle,
                           style: GoogleFonts.plusJakartaSans(
                             color: Colors.white,
                             fontSize: 14,
