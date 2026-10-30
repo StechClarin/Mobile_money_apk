@@ -13,6 +13,8 @@ import '../../features/transactions/presentation/pages/transactions_page.dart';
 import '../../features/account/presentation/pages/account_page.dart';
 import 'package:mobilemoney/features/shop/presentation/pages/shop_page.dart';
 import 'package:mobilemoney/features/shop/presentation/pages/cart_page.dart';
+import 'package:mobilemoney/features/shop/presentation/pages/product_detail_page.dart';
+import 'package:mobilemoney/features/shop/domain/entities/product.dart';
 
 // Helper for Main Tab Transitions (Fade)
 CustomTransitionPage<T> buildMainPage<T>({
@@ -85,6 +87,17 @@ final routerConfig = GoRouter(
         child: const CartPage(),
       ),
     ),
+    GoRoute(
+      path: AppRoutes.productDetail,
+      pageBuilder: (context, state) {
+        final product = state.extra as Product;
+        return buildSecondaryPage(
+          state: state,
+          child: ProductDetailPage(product: product),
+        );
+      },
+    ),
+
     GoRoute(
       path: AppRoutes.auth,
       pageBuilder: (context, state) => buildSecondaryPage(

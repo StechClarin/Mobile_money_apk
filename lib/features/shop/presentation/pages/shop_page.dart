@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobilemoney/core/design_system/app_colors.dart';
@@ -90,22 +91,19 @@ class ShopPage extends ConsumerWidget {
             child: productsAsync.when(
               data: (products) => products.isEmpty
                   ? _buildEmptySearch()
-                  : GridView.builder(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.58,
-                        crossAxisSpacing: 14,
-                        mainAxisSpacing: 14,
-                      ),
+                  : MasonryGridView.count(
+                      padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 14,
+                      mainAxisSpacing: 14,
                       itemCount: products.length,
                       itemBuilder: (context, index) {
                         return ProductCard(
                           product: products[index],
-                          onTap: () {},
                         );
                       },
                     ),
+
               loading: () => const Center(
                 child: CircularProgressIndicator(color: AppColors.monarchPurpleNeon),
               ),
