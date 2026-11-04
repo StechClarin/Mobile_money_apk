@@ -41,8 +41,8 @@ class WallissBottomNavBar extends StatelessWidget {
       label: 'Balance',
     ),
     WallissNavItem(
-      icon: Icons.bar_chart_outlined,
-      activeIcon: Icons.bar_chart_rounded,
+      icon: Icons.storefront_outlined,
+      activeIcon: Icons.storefront_rounded,
       label: 'Market',
     ),
     WallissNavItem(

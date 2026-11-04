@@ -15,7 +15,12 @@ import '../../widgets/promo_carousel.dart';
 import '../../../domain/entities/promo_banner.dart';
 
 class BoutiqueTab extends ConsumerWidget {
-  const BoutiqueTab({super.key});
+  final bool isStandalonePage;
+
+  const BoutiqueTab({
+    super.key,
+    this.isStandalonePage = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,17 +30,22 @@ class BoutiqueTab extends ConsumerWidget {
     final cartItemsCount = ref.watch(cartProvider).length;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isStandalonePage ? AppColors.spotifyBlack : Colors.transparent,
       body: CustomScrollView(
         key: const PageStorageKey('BoutiqueTab'),
         slivers: [
           // 1. Top Navigation Bar
           SliverAppBar(
             backgroundColor: AppColors.spotifyBlack,
-            leading: IconButton(
-              icon: const Icon(Icons.menu_rounded, color: AppColors.monarchPurpleNeon),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            ),
+            leading: isStandalonePage
+                ? IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+                    onPressed: () => Navigator.of(context).pop(),
+                  )
+                : IconButton(
+                    icon: const Icon(Icons.menu_rounded, color: AppColors.monarchPurpleNeon),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  ),
             title: Text(
               'Boutique Walliss',
               style: GoogleFonts.plusJakartaSans(

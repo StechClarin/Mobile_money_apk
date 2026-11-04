@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/design_system/app_colors.dart';
 import '../../../../core/constants.dart';
+import '../manager/home_tab_provider.dart';
 
 class MomoServiceTile extends StatefulWidget {
   final String title;
@@ -92,11 +94,11 @@ class _MomoServiceTileState extends State<MomoServiceTile> with SingleTickerProv
   }
 }
 
-class ServicesGrid extends StatelessWidget {
+class ServicesGrid extends ConsumerWidget {
   const ServicesGrid({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Services list updated for pure money transactions & shop
     final services = [
       {
@@ -107,9 +109,9 @@ class ServicesGrid extends StatelessWidget {
       },
       {
         'title': 'Boutique',
-        'icon': Icons.shopping_bag_outlined,
+        'icon': Icons.storefront_outlined,
         'color': Colors.orangeAccent,
-        'action': () => context.push(AppRoutes.shop),
+        'action': () => ref.read(homeTabIndexProvider.notifier).state = 1,
       },
       {
         'title': 'Cartes',

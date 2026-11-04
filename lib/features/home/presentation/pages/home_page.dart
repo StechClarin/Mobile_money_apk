@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants.dart';
 import '../../../../core/design_system/app_colors.dart';
 import '../../../../core/design_system/walliss_bottom_nav_bar.dart';
+import '../manager/home_tab_provider.dart';
 import 'tabs/money_tab.dart';
 import 'tabs/boutique_tab.dart';
 import '../../../transactions/presentation/pages/transactions_page.dart';
 import '../../../account/presentation/pages/account_page.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0; // 0: Balance (Money), 1: Market (Shop), 2: Exchange (Transactions), 3: Setting (Account)
-
-  final List<Widget> _pages = [
-    const MoneyTab(),          // 0: Balance (Portefeuille & Envois)
-    const BoutiqueTab(),       // 1: Market (Boutique Walliss)
-    const TransactionsPage(),  // 2: Exchange (Transactions & Historique)
-    const AccountPage(),       // 3: Setting (Profil & Paramètres)
+  static const List<Widget> _pages = [
+    MoneyTab(),          // 0: Balance (Portefeuille & Envois)
+    BoutiqueTab(),       // 1: Market (Boutique Walliss)
+    TransactionsPage(),  // 2: Exchange (Transactions & Historique)
+    AccountPage(),       // 3: Setting (Profil & Paramètres)
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentIndex = ref.watch(homeTabIndexProvider);
+
     return Scaffold(
       backgroundColor: AppColors.darkScaffold,
       drawer: Drawer(
@@ -63,15 +60,15 @@ class _HomePageState extends State<HomePage> {
               title: const Text('Transactions d\'argent', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
               onTap: () {
                 Navigator.pop(context);
-                setState(() => _currentIndex = 2);
+                ref.read(homeTabIndexProvider.notifier).state = 2;
               },
             ),
             ListTile(
-              leading: const Icon(Icons.shopping_bag_outlined, color: AppColors.monarchPurpleNeon),
-              title: const Text('Boutique Walliss', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+              leading: const Icon(Icons.storefront_outlined, color: AppColors.monarchPurpleNeon),
+              title: const Text('Boutique Walliss (Market)', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
               onTap: () {
                 Navigator.pop(context);
-                setState(() => _currentIndex = 1);
+                ref.read(homeTabIndexProvider.notifier).state = 1;
               },
             ),
             ListTile(
@@ -88,25 +85,23 @@ class _HomePageState extends State<HomePage> {
               title: const Text('Paramètres & Sécurité', style: TextStyle(color: AppColors.spotifyGrey)),
               onTap: () {
                 Navigator.pop(context);
-                setState(() => _currentIndex = 3);
+                ref.read(homeTabIndexProvider.notifier).state = 3;
               },
             ),
           ],
         ),
       ),
       body: IndexedStack(
-        index: _currentIndex,
+        index: currentIndex,
         children: _pages,
       ),
       bottomNavigationBar: WallissBottomNavBar(
-        currentIndex: _currentIndex,
+        currentIndex: currentIndex,
         onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          ref.read(homeTabIndexProvider.notifier).state = index;
         },
       ),
-      floatingActionButton: _currentIndex == 0 // Show Scan FAB on Balance tab
+      floatingActionButton: currentIndex == 0 // Show Scan FAB on Balance tab
           ? FloatingActionButton.extended(
               onPressed: () {
                 context.push(
