@@ -45,7 +45,7 @@ class HomePage extends ConsumerWidget {
                   ),
                   const SizedBox(height: 10),
                   const Text(
-                    'Walliss Pay & Shop',
+                    'Walliss & Shop',
                     style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(

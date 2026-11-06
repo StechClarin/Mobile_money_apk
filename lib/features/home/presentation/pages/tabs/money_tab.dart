@@ -52,7 +52,7 @@ class _MoneyTabState extends State<MoneyTab> with AutomaticKeepAliveClientMixin 
                 ),
               ),
               const Text(
-                'Walliss Pay',
+                'Walliss',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
